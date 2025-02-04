@@ -1,0 +1,48 @@
+import React from 'react';
+import { View, ScrollView, StyleSheet, Text } from 'react-native';
+import AppHeader from '../components/AppHeader';
+import SearchBar from '../components/SearchBar';
+import CategoryList from '../components/CategoryList';
+import BannerSlider from '../components/BannerSlider';
+import ShoppingCategories from '../components/ShoppingCategories';
+import AnimalCarousel from '../components/AnimalCarousel';
+import ServiceList from '../components/ServiceList';
+import QuickLinks from '../components/QuickLinks';
+
+const Home = ({ navigation }) => {
+  return (
+    <View style={styles.container}>
+      {/* Header */}
+      <AppHeader title="Welcome, Amel" navigation={navigation} />
+
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Search Bar */}
+        <SearchBar />
+
+        {/* Catégories principales */}
+        <CategoryList navigation={navigation} />
+
+        {/* Bannière promotionnelle */}
+        <BannerSlider />
+
+        {/* Shopping Categories */}
+        <ShoppingCategories navigation={navigation} />
+
+        {/* Carrousel des animaux */}
+        <AnimalCarousel navigation={navigation} />
+
+        {/* Services proposés */}
+        <ServiceList navigation={navigation} />
+
+        {/* Navigation rapide */}
+        <QuickLinks navigation={navigation} />
+      </ScrollView>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#F5F5F5' },
+});
+
+export default Home;
