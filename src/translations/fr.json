@@ -1,0 +1,14 @@
+{
+    "home": {
+      "title": "Bienvenue, {{name}} !",
+      "notifications": "Notifications",
+      "no_notifications": "Aucune notification"
+    },
+    "profile": {
+      "title": "Mon Profil",
+      "info": "Mes Informations",
+      "settings": "Paramètres",
+      "logout": "Déconnexion"
+    }
+  }
+  

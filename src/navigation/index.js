@@ -1,7 +1,4 @@
-import React from 'react';
+import AuthStack from './AuthStack';
 import MainStack from './MainStack';
 
-export default function MyNavigator() {
-  // Pas de NavigationContainer ici
-  return <MainStack />;
-}
+export { AuthStack, MainStack };

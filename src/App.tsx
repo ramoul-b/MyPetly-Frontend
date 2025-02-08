@@ -1,33 +1,48 @@
-// App.tsx
-import React, { useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { Provider, useDispatch } from 'react-redux';
+// App.js
+import React, { useEffect, useRef } from 'react';
+import { NavigationContainer, CommonActions } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import store from './redux/store';
-import MyNavigator from './navigation';
 import { checkAuthStatus } from './redux/actions/authActions';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import AuthStack from './navigation/AuthStack';
+import MainStack from './navigation/MainStack';
+import './translations/i18n';
 
+const RootStack = createStackNavigator();
 
-const Root = () => {
+const RootStackScreen = () => {
+  const { isAuthenticated } = useSelector(state => state.auth);
+  return (
+    <RootStack.Navigator screenOptions={{ headerShown: false }}>
+      {isAuthenticated ? (
+        <RootStack.Screen name="MainStack" component={MainStack} />
+      ) : (
+        <RootStack.Screen name="AuthStack" component={AuthStack} />
+      )}
+    </RootStack.Navigator>
+  );
+};
+
+const App = () => {
   const dispatch = useDispatch();
+  const navigationRef = useRef();
 
   useEffect(() => {
-    // Vérifier si l'utilisateur est déjà authentifié
     dispatch(checkAuthStatus());
   }, [dispatch]);
 
   return (
-    <NavigationContainer>
-      <MyNavigator />
-      <Icon name="home" size={30} color="black" />
+    <NavigationContainer ref={navigationRef}>
+      <RootStackScreen />
     </NavigationContainer>
   );
 };
 
-export default function App() {
+export default function RootApp() {
   return (
     <Provider store={store}>
-      <Root />
+      <App />
     </Provider>
   );
 }

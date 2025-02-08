@@ -1,4 +1,3 @@
-// Login.js
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
@@ -10,7 +9,6 @@ import {
   ImageBackground,
   KeyboardAvoidingView
 } from 'react-native';
-import { Button, Input } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -18,7 +16,6 @@ import LoginBackground from '../assets/imgs/bg.png';
 import { loginUser } from '../redux/actions/authActions';
 import AppButton from '../components/AppButton';
 import AppInput from '../components/AppInput';
-
 
 export default function Login() {
   const navigation = useNavigation();
@@ -29,21 +26,19 @@ export default function Login() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      console.log("🔄 Utilisateur authentifié, redirection vers Home...");
-      navigation.replace("Home");
+      console.log("🔄 Utilisateur authentifié, redirection via le RootStack...");
+      // Laissez Redux gérer la navigation via le RootStackScreen.
+      // Vous pouvez également, si vous le souhaitez, utiliser :
+      // navigation.replace("MainStack");
+      // Mais attention : "MainStack" est le nom déclaré dans RootStack, pas "Home".
     }
   }, [isAuthenticated, navigation]);
 
   const handleLogin = () => {
-    console.log("🟢 Bouton LOGIN cliqué");
-    console.log("📧 Email :", email);
-    console.log("🔑 Password :", password);
-
     if (!email || !password) {
       alert("Veuillez remplir tous les champs !");
       return;
     }
-
     dispatch(loginUser(email, password));
   };
 
@@ -62,7 +57,6 @@ export default function Login() {
               value={email}
               onChangeText={setEmail}
             />
-
             <AppInput
               placeholder="Password"
               secureTextEntry
@@ -71,9 +65,6 @@ export default function Login() {
               value={password}
               onChangeText={setPassword}
             />
-
-            
-
             <TouchableOpacity onPress={() => console.log('Forgot Password tapped')}>
               <Text style={styles.forgotPassword}>Forgot Password?</Text>
             </TouchableOpacity>
@@ -83,7 +74,6 @@ export default function Login() {
               onPress={handleLogin}
               disabled={loading}
             />
-
             <TouchableOpacity onPress={() => navigation.navigate('Register')}>
               <Text style={styles.registerLink}>Don't have an account? Sign Up</Text>
             </TouchableOpacity>

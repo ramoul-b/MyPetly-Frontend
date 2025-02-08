@@ -8,12 +8,13 @@ import ShoppingCategories from '../components/ShoppingCategories';
 import AnimalCarousel from '../components/AnimalCarousel';
 import ServiceList from '../components/ServiceList';
 import QuickLinks from '../components/QuickLinks';
-
+import { useTranslation } from 'react-i18next';
 const Home = ({ navigation }) => {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       {/* Header */}
-      <AppHeader title="Welcome, Amel" navigation={navigation} />
+      <AppHeader title={t('home.title')} navigation={navigation} />
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Search Bar */}
