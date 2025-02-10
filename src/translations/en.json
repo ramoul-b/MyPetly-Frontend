@@ -1,14 +1,26 @@
 {
-    "home": {
-      "title": "Welcome, {{name}}!",
-      "notifications": "Notifications",
-      "no_notifications": "No notifications"
-    },
-    "profile": {
-      "title": "My Profile",
-      "info": "My Information",
-      "settings": "Settings",
-      "logout": "Logout"
-    }
+  "home": {
+    "title": "Welcome, {{name}}!",
+    "notifications": "Notifications",
+    "no_notifications": "No notifications"
+  },
+  "profile": {
+    "title": "My Profile",
+    "info": "My Information",
+    "settings": "Settings",
+    "logout": "Logout",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "name": "Full Name",
+    "email": "Email",
+    "phone": "Phone Number",
+    "address": "Address",
+    "change_password": "Change Password",
+    "2fa": "Two-Factor Authentication",
+    "login_history": "Login History",
+    "terms_conditions": "Terms & Conditions",
+    "support": "Support",
+    "my_pets": "My Pets"
   }
-  
+}

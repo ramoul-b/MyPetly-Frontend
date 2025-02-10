@@ -7,8 +7,8 @@ import BannerSlider from '../components/BannerSlider';
 import ShoppingCategories from '../components/ShoppingCategories';
 import AnimalCarousel from '../components/AnimalCarousel';
 import ServiceList from '../components/ServiceList';
-import QuickLinks from '../components/QuickLinks';
 import { useTranslation } from 'react-i18next';
+
 const Home = ({ navigation }) => {
   const { t } = useTranslation();
   return (
@@ -35,8 +35,6 @@ const Home = ({ navigation }) => {
         {/* Services proposés */}
         <ServiceList navigation={navigation} />
 
-        {/* Navigation rapide */}
-        <QuickLinks navigation={navigation} />
       </ScrollView>
     </View>
   );
