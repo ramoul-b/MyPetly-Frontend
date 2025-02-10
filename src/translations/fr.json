@@ -1,14 +1,26 @@
 {
-    "home": {
-      "title": "Bienvenue, {{name}} !",
-      "notifications": "Notifications",
-      "no_notifications": "Aucune notification"
-    },
-    "profile": {
-      "title": "Mon Profil",
-      "info": "Mes Informations",
-      "settings": "Paramètres",
-      "logout": "Déconnexion"
-    }
+  "home": {
+    "title": "Bienvenue, {{name}} !",
+    "notifications": "Notifications",
+    "no_notifications": "Aucune notification"
+  },
+  "profile": {
+    "title": "Mon Profil",
+    "info": "Mes Informations",
+    "settings": "Paramètres",
+    "logout": "Se Déconnecter",
+    "edit": "Modifier",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "name": "Nom Complet",
+    "email": "Email",
+    "phone": "Numéro de Téléphone",
+    "address": "Adresse",
+    "change_password": "Changer le Mot de Passe",
+    "2fa": "Authentification à Deux Facteurs",
+    "login_history": "Historique de Connexion",
+    "terms_conditions": "Conditions Générales",
+    "support": "Support",
+    "my_pets": "Mes Animaux"
   }
-  
+}
