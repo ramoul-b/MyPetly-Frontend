@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import AppIcon from './AppIcon'; // Utilisation du composant d'icônes
+import AppIcon from './AppIcon';
 
 const CardAnimal = ({ pet, onPress }) => {
     return (
         <TouchableOpacity style={styles.card} onPress={onPress}>
             {/* PHOTO DE L’ANIMAL */}
-            <Image source={{ uri: pet.photoUrl }} style={styles.image} />
+            <Image source={{ uri: pet.photo }} style={styles.image} />
 
             {/* INFORMATIONS */}
             <View style={styles.info}>
@@ -20,8 +20,8 @@ const CardAnimal = ({ pet, onPress }) => {
                     </Text>
 
                     {/* ICONE DU COLLIER SI EXISTANT */}
-                    {pet.collarType && (
-                        <AppIcon name="shield-checkmark" size={20} color="blue" /> // Icône sécurisée pour indiquer un collier attaché
+                    {pet.collar && (
+                        <AppIcon name="shield-checkmark" size={20} color="blue" />
                     )}
                 </View>
             </View>

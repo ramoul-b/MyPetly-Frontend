@@ -18,9 +18,15 @@ end
 
 target 'MyPetlyMobileAppV2' do
   config = use_native_modules!
+  # use_frameworks!
+ 
+  # Ajout de Google Maps
+  pod 'GoogleMaps'
+  pod 'Google-Maps-iOS-Utils'
 
   use_react_native!(
     :path => config[:reactNativePath],
+    :hermes_enabled => true, # Active Hermes
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
