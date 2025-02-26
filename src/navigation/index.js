@@ -1,3 +1,5 @@
+//index.js
+
 import AuthStack from './AuthStack';
 import MainStack from './MainStack';
 
