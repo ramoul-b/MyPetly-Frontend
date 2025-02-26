@@ -1,35 +1,26 @@
 export default {
   COLORS: {
-    DEFAULT: '#172B4D',
-    PRIMARY: '#5E72E4',
-    SECONDARY: '#F7FAFC',
-    LABEL: '#FE2472',
-    INFO: '#11CDEF',
-    ERROR: '#F5365C',
-    SUCCESS: '#2DCE89',
-    WARNING: '#FB6340',
-    /*not yet changed */
-    MUTED: '#ADB5BD',
-    INPUT: '#DCDCDC',
-    INPUT_SUCCESS: '#7BDEB2',
-    INPUT_ERROR: '#FCB3A4',
-    ACTIVE: '#5E72E4', //same as primary
-    BUTTON_COLOR: '#9C26B0', //wtf
-    PLACEHOLDER: '#9FA5AA',
-    SWITCH_ON: '#5E72E4',
-    SWITCH_OFF: '#D4D9DD',
-    GRADIENT_START: '#6B24AA',
-    GRADIENT_END: '#AC2688',
-    PRICE_COLOR: '#EAD5FB',
-    BORDER_COLOR: '#E7E7E7',
-    BLOCK: '#E7E7E7',
-    ICON: '#172B4D',
-    HEADER: '#525F7F',
-    BORDER: '#CAD1D7',
-    WHITE: '#FFFFFF',
-    BLACK: '#000000'
+    PRIMARY: "#5E72E4",
+    SECONDARY: "#F7FAFC",
+    SUCCESS: "#2DCE89",
+    ERROR: "#F5365C",
+    WARNING: "#FB6340",
+    BACKGROUND: "#F5F5F5",
+    TEXT_PRIMARY: "#172B4D",
+    TEXT_SECONDARY: "#6D9EEB",
+    INPUTBG: "#F0F0F0",
+    Reminder:"#4A67C3",
   },
-  SIZES: {
-    BASE: 16,
+  FONTS: {
+    SMALL: 12,
+    MEDIUM: 16,
+    LARGE: 20,
+    BOLD: "600",
+  },
+  SPACING: {
+    NONE: 0,
+    SMALL: 8,
+    MEDIUM: 16,
+    LARGE: 24,
   },
 };

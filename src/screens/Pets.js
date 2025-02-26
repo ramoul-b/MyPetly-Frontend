@@ -1,11 +1,66 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-//import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import AppHeader from '../components/AppHeader';
 import FloatingButton from '../components/FloatingButton';
 import CardAnimal from '../components/CardAnimal';
-import { getPets } from '../components/ServiceList';
+//import { getPets } from '../services/ServiceList';
+
+
+export const getPets = async () => {
+  return [
+      {
+          id: 1,
+          name: "Max",
+          species: "Chien",
+          breed: "Golden Retriever",
+          birthdate: "2021-04-15",
+          status: "active",
+          photo: "https://images.pexels.com/photos/1805164/pexels-photo-1805164.jpeg",
+          collar: "GPS",
+      },
+      {
+          id: 2,
+          name: "Milo",
+          species: "Chat",
+          breed: "Siamois",
+          birthdate: "2020-08-22",
+          status: "lost",
+          photo: "https://images.pexels.com/photos/2071873/pexels-photo-2071873.jpeg",
+          collar: "NFC",
+      },
+      {
+          id: 3,
+          name: "Bella",
+          species: "Chien",
+          breed: "Labrador",
+          birthdate: "2019-06-10",
+          status: "active",
+          photo: "https://images.pexels.com/photos/257540/pexels-photo-257540.jpeg",
+          collar: "QR Code",
+      },
+      {
+          id: 4,
+          name: "Luna",
+          species: "Chat",
+          breed: "Maine Coon",
+          birthdate: "2022-02-05",
+          status: "active",
+          photo: "https://images.pexels.com/photos/617278/pexels-photo-617278.jpeg",
+          collar: "GPS",
+      },
+      {
+          id: 5,
+          name: "Rocky",
+          species: "Chien",
+          breed: "Bulldog",
+          birthdate: "2018-11-03",
+          status: "lost",
+          photo: "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg",
+          collar: "None",
+      }
+  ];
+};
 
 const PetsScreen = () => {
     const navigation = useNavigation();

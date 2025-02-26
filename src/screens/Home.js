@@ -3,20 +3,26 @@ import { View, ScrollView, StyleSheet, Text } from 'react-native';
 import AppHeader from '../components/AppHeader';
 import SearchBar from '../components/SearchBar';
 import CategoryList from '../components/CategoryList';
-import BannerSlider from '../components/BannerSlider';
+import BannerSlider from '../components/AdBanner';
 import ShoppingCategories from '../components/ShoppingCategories';
 import AnimalCarousel from '../components/AnimalCarousel';
 import ServiceList from '../components/ServiceList';
 import { useTranslation } from 'react-i18next';
+import HomeStyles from "../styles/HomeStyles";
+import ReminderCarousel from '../components/ReminderCarousel';
+import BlogCommunitySection from '../components/BlogCommunitySection';
+
 
 const Home = ({ navigation }) => {
   const { t } = useTranslation();
   return (
-    <View style={styles.container}>
+    <View style={HomeStyles.container}>
       {/* Header */}
       <AppHeader title={t('home.title')} navigation={navigation} />
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView  showsVerticalScrollIndicator={false}>
+        {/* Carrousel des rappels et notifications  */}
+        <ReminderCarousel />
         {/* Search Bar */}
         <SearchBar />
 
@@ -29,19 +35,15 @@ const Home = ({ navigation }) => {
         {/* Shopping Categories */}
         <ShoppingCategories navigation={navigation} />
 
-        {/* Carrousel des animaux */}
-        <AnimalCarousel navigation={navigation} />
+        <BlogCommunitySection navigation={navigation} />
 
-        {/* Services proposés */}
-        <ServiceList navigation={navigation} />
+
 
       </ScrollView>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F5F5' },
-});
+
 
 export default Home;

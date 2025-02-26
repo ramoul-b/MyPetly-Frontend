@@ -12,7 +12,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
-import LoginBackground from '../assets/imgs/bg1.png';
+import LoginBackground from '../assets/imgs/bg.png';
 import { loginUser } from '../redux/actions/authActions';
 import AppButton from '../components/AppButton';
 import AppInput from '../components/AppInput';
@@ -46,7 +46,6 @@ export default function Login() {
     <View style={styles.container}>
       <StatusBar hidden />
       <ImageBackground source={LoginBackground} style={styles.background}>
-      <Text style={styles.AppName}>MyPetly</Text>
         <KeyboardAvoidingView style={styles.formWrapper} behavior="padding" enabled>
           <View style={styles.formContainer}>
             <Text style={styles.title}>Login</Text>
@@ -90,7 +89,6 @@ const styles = StyleSheet.create({
   background: { flex: 1, width: '100%', height: '100%', resizeMode: 'cover' },
   formWrapper: { flex: 1, justifyContent: 'center', paddingHorizontal: 20 },
   formContainer: { backgroundColor: "rgba(244,245,247, 0.9)", borderRadius: 4, padding: 20 },
-  AppName: { fontSize: 50, marginTop: 100, textAlign: 'center', fontWeight: 'bold', color:'white' },
   title: { fontSize: 24, marginBottom: 20, textAlign: 'center', fontWeight: 'bold' },
   inputContainer: { marginBottom: 15 },
   forgotPassword: { marginBottom: 20, textAlign: 'right', color: '#5E72E4', textDecorationLine: 'underline' },

@@ -15,7 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../redux/actions/authActions';
 import Icon from 'react-native-vector-icons/Ionicons';
-import RegisterBackground from '../assets/imgs/bg1.png';
+import RegisterBackground from '../assets/imgs/bg.png';
 
 export default function Register() {
   const navigation = useNavigation();
@@ -68,9 +68,7 @@ export default function Register() {
   return (
     <View style={styles.container}>
       <StatusBar hidden />
-      
       <ImageBackground source={RegisterBackground} style={styles.background}>
-      <Text style={styles.AppName}>MY PETLY</Text>
         <KeyboardAvoidingView style={styles.formWrapper} behavior="padding" enabled>
           <View style={styles.formContainer}>
             <Text style={styles.title}>Register</Text>
@@ -134,7 +132,6 @@ const styles = StyleSheet.create({
   background: { flex: 1, width: '100%', height: '100%', resizeMode: 'cover' },
   formWrapper: { flex: 1, justifyContent: 'center', paddingHorizontal: 20 },
   formContainer: { backgroundColor: "rgba(244,245,247, 0.9)", borderRadius: 4, padding: 20 },
-  AppName: { fontSize: 50, marginTop: 100, textAlign: 'center', fontWeight: 'bold', color:'white' },
   title: { fontSize: 24, marginBottom: 20, textAlign: 'center', fontWeight: 'bold' },
   inputContainer: { marginBottom: 15 },
   createButton: { backgroundColor: '#5E72E4', borderRadius: 4 },
