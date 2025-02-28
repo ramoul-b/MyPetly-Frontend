@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
 import CategoryListStyles from "../styles/CategoryListStyles";
 import Theme from "../constants/Theme";
 
@@ -19,7 +20,9 @@ const categories = [
   { id: '12', name: 'Events', icon: 'event', type: 'material', color: '#3F51B5' }, // Événements
 ];
 
-const CategoryList = ({ navigation }) => {
+const CategoryList = () => {
+  const navigation = useNavigation();
+
   return (
     <View style={CategoryListStyles.container}>
       <View style={CategoryListStyles.header}>
@@ -36,7 +39,7 @@ const CategoryList = ({ navigation }) => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={[CategoryListStyles.category, { backgroundColor: '#F5F5F5', borderColor: item.color }]}
-            onPress={() => console.log(`Navigating to ${item.name}`)}
+            onPress={() => navigation.navigate('ServiceProviders', { serviceName: item.name })}
           >
             <Icon name={item.icon} type={item.type} size={22} color={item.color} style={CategoryListStyles.icon} />
             <Text style={[CategoryListStyles.text, { color: Theme.COLORS.TEXT_PRIMARY }]}>{item.name}</Text>

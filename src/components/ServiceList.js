@@ -11,7 +11,9 @@ const ServiceList = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>🛍 Services</Text>
       {services.map(service => (
-        <TouchableOpacity key={service.id} onPress={() => navigation.navigate(service.route)}>
+        <TouchableOpacity key={service.id}
+        onPress={() => navigation.navigate('ServiceProviders', { serviceName: service.name })}
+        >
           <Text style={styles.service}>{service.name}</Text>
         </TouchableOpacity>
       ))}
