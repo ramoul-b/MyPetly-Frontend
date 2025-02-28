@@ -3,6 +3,7 @@ import { View, Image, StyleSheet } from "react-native";
 import SplashScreen from "react-native-splash-screen"; // Import du package
 import * as Animatable from "react-native-animatable";
 
+
 const pawIcons = [
   require("../assets/imgs/icon-1.png"),
   require("../assets/imgs/icon-2.png"),

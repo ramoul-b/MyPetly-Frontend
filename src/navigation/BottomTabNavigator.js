@@ -2,17 +2,18 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '../screens/Home';
+import ServiceProvidersScreen from '../screens/ServiceProvidersList'; // 📌 Ajouté ici
 import PetsScreen from '../screens/Pets';
 import TrackPetsScreen from '../screens/TrackPetsScreen';
 import MarketplaceScreen from '../screens/Marketplace';
 import CommunityScreen from '../screens/Community';
-import ProfileScreen from '../screens/Profile'; // Import de la page Profil
+import ProfileScreen from '../screens/Profile'; 
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-// ⚡ Stack interne pour gérer Home et Profile sans enlever le BottomTab
+// ⚡ Stack interne pour gérer Home et les pages associées
 function HomeStack() {
   return (
     <Stack.Navigator>
@@ -22,9 +23,14 @@ function HomeStack() {
         options={{ headerShown: false }} 
       />
       <Stack.Screen 
+        name="ServiceProviders" 
+        component={ServiceProvidersScreen} 
+        options={{ headerShown: false }} 
+      />
+      <Stack.Screen 
         name="Profile" 
         component={ProfileScreen} 
-        options={{ headerShown: false }} // Profile s'ouvre sans cacher la barre du bas
+        options={{ headerShown: false }} 
       />
     </Stack.Navigator>
   );
@@ -42,7 +48,7 @@ export default function BottomTabNavigator() {
     >
       <Tab.Screen 
         name="HomeTab" 
-        component={HomeStack}  // Utilise la stack pour Home et Profile
+        component={HomeStack}  // 📌 Utilise la stack Home avec ServiceProviders inclus
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => <Icon name="home-outline" color={color} size={size} />,
