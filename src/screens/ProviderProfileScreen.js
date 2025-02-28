@@ -1,245 +1,157 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import AppHeader from '../components/AppHeader';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import ProfileHeader from '../components/ProviderProfile/ProfileHeader';
+import Schedule from '../components/ProviderProfile/Schedule';
+import Biography from '../components/ProviderProfile/Biography';
+import Experience from '../components/ProviderProfile/Experience';
+import Reviews from '../components/ProviderProfile/Reviews';
+import NearbyVets from '../components/ProviderProfile/NearbyVets';
+import MapSection from '../components/ProviderProfile/MapSection';
+import BookingButton from '../components/ProviderProfile/BookingButton';
+import ProviderProfileStyles from '../styles/ProviderProfileStyles';
+import HighlightedReview from '../components/ProviderProfile/HighlightedReview';
 
-const provider = {
+// Import de l'image du vétérinaire
+const profileImage = require('../assets/imgs/bailey-burton-8vlc3e_Tv-w-unsplash.jpg');
+
+// Import des avatars locaux
+const avatar1 = require('../assets/imgs/members1-icon.jpg');
+const avatar2 = require('../assets/imgs/members2-icon.jpg');
+const avatar3 = require('../assets/imgs/members3-icon.jpg');
+const avatar4 = require('../assets/imgs/members4-icon.jpg');
+const avatar5 = require('../assets/imgs/members5-icon.jpg');
+
+const providerData = {
   id: 1,
-  name: 'Aleksenko Vasily',
+  name: 'Alekseenko Vasily',
   specialty: 'Veterinary Dentist',
-  experience: '10 years of experience',
   rating: 4.9,
   reviews: 125,
+  experience: '10 years of experience',
   price: '$20',
   distance: '1.5 km',
-  clinic: 'Veterinary clinic "Alden-Vet"',
-  address: '141 N Union Ave, Los Angeles, CA',
-  biography: `Aleksenko Vasily Vasilyevich, born in 1974. Master of Veterinary Medicine. Leading doctor at "Alden-Vet".
-  Specialization: clinical diagnostics, surgery vet, dentist.`,
+  biography: `Master of Veterinary Medicine. Leading doctor at "Alden-Vet". Specialization: clinical diagnostics, surgery vet, dentist.`,
   professionalExperience: [
-    'Repeated participant and winner of the International Conferences.',
-    'From 1998 to 2001, chief physician of Equus veterinary medicine clinic.',
-    'Constantly increases the level of his qualifications.',
-    'Since 2006, leading doctor at "UCCA" veterinary care.',
+    'Winner of International Conferences.',
+    'Chief physician of Equus veterinary clinic (1998-2001).',
+    'Constantly attends workshops and congresses.',
+    'Leading doctor at "UCCA" veterinary care since 2006.',
   ],
-  personalInfo: 'Candidate master of sports in equestrian sport (dressage). Favorite dog breed: German Shepherd. Married with two children.',
-  image: 'https://images.pexels.com/photos/3783479/pexels-photo-3783479.jpeg',
+  location: {
+    latitude: 34.052235,
+    longitude: -118.243683,
+    address: '141 N Union Ave, Los Angeles, CA',
+  },
+  image: profileImage,
+  schedule: ["09:00", "09:30", "10:00", "10:30"],
   reviewsList: [
     {
       id: 1,
       user: 'Ann & Leo',
       date: '26.02.2019',
-      rating: 5,
-      comment: 'Great clinic! The dog was limping, prescribed quality treatment. Excellent specialists!',
-      image: 'https://images.pexels.com/photos/1452717/pexels-photo-1452717.jpeg',
+      comment: 'Great clinic! The dog was limping, prescribed quality treatment.',
+      avatar: avatar1,
     },
     {
       id: 2,
       user: 'John Doe',
       date: '14.08.2021',
-      rating: 4.5,
       comment: 'Very professional, handled my cat’s emergency very well.',
-      image: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg',
+      avatar: avatar2,
+    },
+    {
+      id: 3,
+      user: 'Sarah L.',
+      date: '02.07.2020',
+      comment: 'Highly recommended for pet dental care.',
+      avatar: avatar3,
+    },
+    {
+      id: 4,
+      user: 'Emily R.',
+      date: '15.05.2022',
+      comment: 'Best vet in the area, very caring and professional.',
+      avatar: avatar4,
+    },
+    {
+      id: 5,
+      user: 'Michael B.',
+      date: '10.09.2021',
+      comment: 'Quick and efficient service!',
+      avatar: avatar5,
     },
   ],
   nearbyVets: [
     {
-      id: 2,
+      id: '1',
       name: 'Lauren Sell',
       specialty: 'Veterinary Dentist',
       experience: '7 years of experience',
-      rating: 4.6,
-      price: '$20',
-      distance: '1.5 km',
-      image: 'https://images.pexels.com/photos/4578924/pexels-photo-4578924.jpeg',
+      rating: 4.7,
+      reviews: 23,
+      price: "$20",
+      distance: "1.5 km",
+      image: "https://images.pexels.com/photos/4587996/pexels-photo-4587996.jpeg"
     },
+    {
+      id: '2',
+      name: 'Daniel Carter',
+      specialty: 'Veterinarian',
+      experience: '5 years of experience',
+      rating: 4.6,
+      reviews: 30,
+      price: "$18",
+      distance: "2 km",
+      image: "https://images.unsplash.com/photo-1528747008803-d2415c6e0bf8?w=1080&q=80"
+    }
   ],
+};
+const handleWriteReview = () => {
+  console.log("Navigate to Write Review Screen");
+  // Ici, tu peux ajouter la navigation vers un écran d'ajout d'avis
 };
 
 const ProviderProfileScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
-      <AppHeader title={provider.name} navigation={navigation} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Image et info principale */}
-        <Image source={{ uri: provider.image }} style={styles.profileImage} />
-        <View style={styles.headerInfo}>
-          <Text style={styles.name}>{provider.name}</Text>
-          <Text style={styles.specialty}>{provider.specialty}</Text>
-          <View style={styles.row}>
-            <Text style={styles.rating}>⭐ {provider.rating}</Text>
-            <Text style={styles.reviews}>{provider.reviews} Reviews</Text>
-          </View>
-          <Text style={styles.experience}>{provider.experience}</Text>
-          <View style={styles.row}>
-            <Text style={styles.price}>{provider.price}</Text>
-            <Text style={styles.distance}>📍 {provider.distance}</Text>
-          </View>
-        </View>
+    <View style={ProviderProfileStyles.container}>
+      <ScrollView 
+  showsVerticalScrollIndicator={false} 
+  contentContainerStyle={{ paddingBottom: 130 }} // Ajout d'un padding pour éviter le chevauchement
+>
 
-        {/* Biographie */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Biography</Text>
-          <Text style={styles.text}>{provider.biography}</Text>
-        </View>
-
-        {/* Expérience professionnelle */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Professional Experience</Text>
-          {provider.professionalExperience.map((item, index) => (
-            <View key={index} style={styles.listItem}>
-              <Icon name="check-circle" size={18} color="#4CAF50" />
-              <Text style={styles.text}>{item}</Text>
-            </View>
-          ))}
-        </View>
-
-        {/* Avis */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Reviews</Text>
-          {provider.reviewsList.map((review) => (
-            <View key={review.id} style={styles.reviewCard}>
-              <Image source={{ uri: review.image }} style={styles.reviewImage} />
-              <View style={styles.reviewContent}>
-                <Text style={styles.reviewUser}>{review.user}</Text>
-                <Text style={styles.reviewDate}>{review.date}</Text>
-                <Text style={styles.reviewText}>{review.comment}</Text>
-              </View>
-            </View>
-          ))}
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Write a Review</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Vétérinaires à proximité */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Nearby Vets</Text>
-          {provider.nearbyVets.map((vet) => (
-            <View key={vet.id} style={styles.nearbyCard}>
-              <Image source={{ uri: vet.image }} style={styles.nearbyImage} />
-              <View style={styles.nearbyInfo}>
-                <Text style={styles.name}>{vet.name}</Text>
-                <Text style={styles.specialty}>{vet.specialty}</Text>
-                <Text style={styles.rating}>⭐ {vet.rating}</Text>
-                <Text style={styles.price}>{vet.price}</Text>
-                <Text style={styles.distance}>📍 {vet.distance}</Text>
-              </View>
-            </View>
-          ))}
-        </View>
-
-        {/* Bouton de réservation */}
-        <TouchableOpacity style={styles.bookButton}>
-          <Text style={styles.bookButtonText}>Book Appointment</Text>
-        </TouchableOpacity>
+        <ProfileHeader
+          name={providerData.name}
+          specialty={providerData.specialty}
+          rating={providerData.rating}
+          reviews={providerData.reviews}
+          price={providerData.price}
+          distance={providerData.distance}
+          image={providerData.image}
+        />
+        <HighlightedReview
+  review={{
+    comment: "He was friendly and diligent in getting to the right diagnosis and prescription.",
+    totalReviews: providerData.reviews
+  }}
+  onPress={() => console.log('Navigate to all reviews')}
+/>
+        <Schedule schedule={providerData.schedule} />
+        <MapSection location={providerData.location} name={providerData.name} />
+        <Biography bio={providerData.biography} />
+        <Experience experiences={providerData.professionalExperience} />
+        <Reviews reviews={providerData.reviewsList} onWriteReview={handleWriteReview} />
+        <NearbyVets vets={providerData.nearbyVets} />
+       
       </ScrollView>
+       {/* Bouton de réservation fixé en bas */}
+       <View style={ProviderProfileStyles.fixedBookingContainer}>
+        <BookingButton />
+      </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
-  profileImage: {
-    width: '100%',
-    height: 250,
-    resizeMode: 'cover',
-  },
-  headerInfo: {
-    padding: 15,
-    backgroundColor: '#FFF',
-    marginHorizontal: 15,
-    borderRadius: 10,
-    marginTop: -30,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
-  },
-  name: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  specialty: {
-    fontSize: 14,
-    color: '#555',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 5,
-  },
-  price: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#4CAF50',
-  },
-  distance: {
-    fontSize: 14,
-    color: '#555',
-  },
-  section: {
-    marginTop: 15,
-    paddingHorizontal: 15,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  text: {
-    fontSize: 14,
-    color: '#333',
-    lineHeight: 20,
-  },
-  listItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 3,
-  },
-  reviewCard: {
-    flexDirection: 'row',
-    padding: 10,
-    backgroundColor: '#FFF',
-    borderRadius: 10,
-    marginTop: 10,
-  },
-  reviewImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-  },
-  reviewContent: {
-    marginLeft: 10,
-  },
-  reviewUser: {
-    fontWeight: 'bold',
-  },
-  reviewDate: {
-    fontSize: 12,
-    color: '#888',
-  },
-  reviewText: {
-    fontSize: 14,
-  },
-  bookButton: {
-    backgroundColor: '#5E72E4',
-    padding: 15,
-    margin: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  bookButtonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-});
 
 export default ProviderProfileScreen;

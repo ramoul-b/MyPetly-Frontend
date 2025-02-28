@@ -110,7 +110,9 @@ const ServiceProvidersScreen = () => {
         data={serviceProviders}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ProviderDetails', { providerId: item.id })}>
+          <TouchableOpacity style={styles.card} 
+          onPress={() => navigation.navigate('ProviderProfile', { providerId: item.id })}
+          >
             <Image source={{ uri: item.image }} style={styles.image} />
             <View style={styles.info}>
               <Text style={styles.name}>{item.name}</Text>

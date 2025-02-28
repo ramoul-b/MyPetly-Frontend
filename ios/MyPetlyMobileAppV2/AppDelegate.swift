@@ -12,7 +12,16 @@ class AppDelegate: RCTAppDelegate {
     // You can add your custom initial props in the dictionary below.
     // They will be passed down to the ViewController used by React Native.
     self.initialProps = [:]
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    
+    
+    
+    // Appeler la méthode de la classe parente pour initialiser le React Native Bridge et le ViewController
+    let result = super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    
+    // Afficher le splash screen natif dès que la configuration est terminée
+    RNSplashScreen.show()
+    
+    return result
   }
 
   override func sourceURL(for bridge: RCTBridge) -> URL? {
