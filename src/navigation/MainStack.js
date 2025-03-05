@@ -8,28 +8,24 @@ import ProviderProfileScreen from '../screens/ProviderProfileScreen';
 
 
 const Stack = createStackNavigator();
+console.log("📌 MainStack chargé");
 
 export default function MainStack() {
   return (
-    <Stack.Navigator initialRouteName="Splash">
-      <Stack.Screen
-        name="Splash"
-        component={Splash}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Main"
-        component={BottomTabNavigator}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
-      <Stack.Screen name="AddPet" component={AddPetScreen} options={{ headerShown: false }} />
-      <Stack.Screen
-        name="ProviderProfile"
-        component={ProviderProfileScreen}
-        options={{ headerShown: false }}
-      />
-     </Stack.Navigator>
+    <Stack.Navigator>
+    <Stack.Screen
+      name="HomeTabs"
+      component={BottomTabNavigator}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+    <Stack.Screen name="AddPet" component={AddPetScreen} options={{ headerShown: false }} />
+    <Stack.Screen
+      name="ProviderProfile"
+      component={ProviderProfileScreen}
+      options={{ headerShown: false }}
+    />
+  </Stack.Navigator>
   );
 }
 

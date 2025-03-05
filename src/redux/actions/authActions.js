@@ -3,6 +3,12 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loginStart, loginSuccess, loginFailure, logout } from '../reducers/authReducer';
 
+
+// ✅ TEST : Vérifier si l'API est accessible depuis React Native
+fetch('http://vps-88a3af89.vps.ovh.net:8081/api/v1/login')
+  .then(response => console.log("✅ Test connexion API OK", response))
+  .catch(error => console.log("❌ Impossible de se connecter à l'API", error));
+
 // Action pour enregistrer (inscrire) un nouvel utilisateur
 export const registerUser = (name, email, password, passwordConfirmation) => async (dispatch) => {
   console.log("🟢 Action registerUser déclenchée !");
@@ -10,7 +16,7 @@ export const registerUser = (name, email, password, passwordConfirmation) => asy
 
   try {
     // Appel à l'API pour l'inscription
-    const response = await axios.post('http://localhost:8000/api/v1/register', {
+    const response = await axios.post('http://vps-88a3af89.vps.ovh.net:8081/api/v1/register', {
       name,
       email,
       password,
@@ -45,7 +51,10 @@ export const loginUser = (email, password) => async (dispatch) => {
   dispatch(loginStart());
 
   try {
-    const response = await axios.post('http://localhost:8000/api/v1/login', { email, password });
+    console.log("🔍 Envoi d'une requête POST à :", 'http://vps-88a3af89.vps.ovh.net:8081/api/v1/login');
+console.log("🔍 Corps de la requête :", { email, password });
+
+    const response = await axios.post('http://vps-88a3af89.vps.ovh.net:8081/api/v1/login', { email, password });
     console.log("✅ Réponse API reçue :", response.data);
 
     if (response.data.access_token && response.data.user) {

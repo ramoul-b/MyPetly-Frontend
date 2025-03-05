@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ProfileHeader from '../components/ProviderProfile/ProfileHeader';
 import Schedule from '../components/ProviderProfile/Schedule';
@@ -117,6 +117,7 @@ const ProviderProfileScreen = () => {
 
   return (
     <View style={ProviderProfileStyles.container}>
+    <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       <ScrollView 
   showsVerticalScrollIndicator={false} 
   contentContainerStyle={{ paddingBottom: 130 }} // Ajout d'un padding pour éviter le chevauchement

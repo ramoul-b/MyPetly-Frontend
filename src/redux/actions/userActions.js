@@ -22,7 +22,7 @@ export const updateUser = (updatedData) => async (dispatch, getState) => {
     const token = getState().auth.token; // Récupération du token depuis l'état d'authentification
 
     // Remplacer PUT par POST
-    const response = await axios.post('http://localhost:8000/api/v1/account/profile', updatedData, {
+    const response = await axios.post('http://vps-88a3af89.vps.ovh.net:8081/api/v1/account/profile', updatedData, {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log("Réponse API dans updateUser:", response.data); // Log pour vérifier la réponse
