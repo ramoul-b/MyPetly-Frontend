@@ -22,5 +22,23 @@
     "terms_conditions": "Termini & Condizioni",
     "support": "Supporto",
     "my_pets": "I Miei Animali"
+  },
+  "auth": {
+    "register_start": "🟢 Avvio della registrazione...",
+    "register_success": "✅ Registrazione avvenuta con successo!",
+    "register_error": "❌ Errore durante la registrazione:",
+    "login_start": "🟢 Avvio del login...",
+    "login_success": "✅ Accesso riuscito!",
+    "login_error": "❌ Errore durante l'accesso:",
+    "sending_request": "🔍 Invio della richiesta a:",
+    "request_body": "🔍 Corpo della richiesta:",
+    "api_response": "✅ Risposta API ricevuta:",
+    "invalid_response": "❌ Risposta API non valida",
+    "unknown_error": "❌ Errore sconosciuto",
+    "session_restored": "✅ Sessione ripristinata",
+    "no_user_connected": "🔴 Nessun utente connesso.",
+    "session_error": "❌ Errore durante il controllo della sessione:",
+    "logout_success": "✅ Disconnessione avvenuta con successo!",
+    "logout_error": "❌ Errore durante la disconnessione:"
   }
 }

@@ -1217,7 +1217,7 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-image-picker (8.0.0):
+  - react-native-image-picker (8.2.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1618,7 +1618,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNCAsyncStorage (2.1.0):
+  - RNCAsyncStorage (2.1.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1640,6 +1640,27 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - RNGestureHandler (2.22.1):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - RNKeychain (10.0.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1915,6 +1936,7 @@ DEPENDENCIES:
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -2075,6 +2097,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNKeychain:
+    :path: "../node_modules/react-native-keychain"
   RNLocalize:
     :path: "../node_modules/react-native-localize"
   RNReanimated:
@@ -2126,7 +2150,7 @@ SPEC CHECKSUMS:
   React-logger: 9a0c4e1e41cd640ac49d69aacadab783f7e0096b
   React-Mapbuffer: 6993c785c22a170c02489bc78ed207814cbd700f
   React-microtasksnativemodule: 19230cd0933df6f6dc1336c9a9edc382d62638ae
-  react-native-image-picker: c1ecf2bc4393b8ecaa6a40be41a18924f120081a
+  react-native-image-picker: 0452fc9efc21101946746663bf34e0db5741f00c
   react-native-maps: ee1e65647460c3d41e778071be5eda10e3da6225
   react-native-safe-area-context: 9c33120e9eac7741a5364cc2d9f74665049b76b3
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
@@ -2160,8 +2184,9 @@ SPEC CHECKSUMS:
   ReactCodegen: 1baa534318b19e95fb0f02db0a1ae1e3c271944d
   ReactCommon: 6014af4276bb2debc350e2620ef1bd856b4d981c
   RNBootSplash: 9819342743dd95b47440daf6c7cc9198bf5185e6
-  RNCAsyncStorage: 309dabeb856c37a9167db791615cf7738d201103
+  RNCAsyncStorage: 4f4de141719fef3490c87a0dd779575c64c0472c
   RNGestureHandler: 22ab0e79b8ed145c4bd4a4f85088f5d711f13580
+  RNKeychain: 8854726dc7c45dbcc0db9a0444ae58a8b7b07266
   RNLocalize: 3d7ad7ba552f88675462007d61571a0f6632ee6f
   RNReanimated: ef80cf675203a39bb5e5464234cb08a0f0040ac2
   RNScreens: c8c0b69f667891d474ad1229054d514f06778772
@@ -2171,4 +2196,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: bf1a812e499696cd3e11bc7ac306ada7225035e0
 
-COCOAPODS: 1.16.1
+COCOAPODS: 1.16.2

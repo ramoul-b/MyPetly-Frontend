@@ -22,5 +22,23 @@
     "terms_conditions": "Terms & Conditions",
     "support": "Support",
     "my_pets": "My Pets"
+  },
+  "auth": {
+    "register_start": "🟢 Starting registration...",
+    "register_success": "✅ Registration successful!",
+    "register_error": "❌ Error during registration:",
+    "login_start": "🟢 Starting login...",
+    "login_success": "✅ Login successful!",
+    "login_error": "❌ Error during login:",
+    "sending_request": "🔍 Sending request to:",
+    "request_body": "🔍 Request body:",
+    "api_response": "✅ API response received:",
+    "invalid_response": "❌ Invalid API response",
+    "unknown_error": "❌ Unknown error",
+    "session_restored": "✅ Session restored",
+    "no_user_connected": "🔴 No user connected.",
+    "session_error": "❌ Error while checking session:",
+    "logout_success": "✅ Logout successful!",
+    "logout_error": "❌ Error during logout:"
   }
 }

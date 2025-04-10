@@ -10,13 +10,14 @@
     "test": "jest"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^2.1.0",
+    "@react-native-async-storage/async-storage": "^2.1.2",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/compat": "^5.3.20",
     "@react-navigation/native": "^7.0.14",
     "@react-navigation/stack": "^7.1.1",
-    "@reduxjs/toolkit": "^2.5.1",
-    "axios": "^1.7.9",
+    "@reduxjs/toolkit": "^2.6.1",
+    "axios": "^1.8.4",
+    "formik": "^2.4.6",
     "hermes-engine": "^0.11.0",
     "i18next": "^24.2.2",
     "react": "18.3.1",
@@ -25,8 +26,10 @@
     "react-native-animatable": "^1.4.0",
     "react-native-bootsplash": "^6.3.3",
     "react-native-elements": "^3.4.3",
+    "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.22.1",
-    "react-native-image-picker": "^8.0.0",
+    "react-native-image-picker": "^8.2.0",
+    "react-native-keychain": "^10.0.0",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-localize": "^3.4.1",
     "react-native-maps": "^1.20.1",
@@ -37,7 +40,9 @@
     "react-native-splash-screen": "^3.3.0",
     "react-native-swipeable-views": "^0.13.6",
     "react-native-vector-icons": "^10.2.0",
-    "react-redux": "^9.2.0"
+    "react-query": "^3.39.3",
+    "react-redux": "^9.2.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

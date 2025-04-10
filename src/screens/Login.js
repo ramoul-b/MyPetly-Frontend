@@ -10,27 +10,23 @@ import {
   KeyboardAvoidingView
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LoginBackground from '../assets/imgs/bg.png';
-import { loginUser } from '../redux/actions/authActions';
+import { useLogin } from '../hooks/useLogin'; // ✅ hook
 import AppButton from '../components/AppButton';
 import AppInput from '../components/AppInput';
 
 export default function Login() {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const { loading, error, isAuthenticated } = useSelector(state => state.auth);
+  const { mutate: login, isLoading, error } = useLogin(); // ✅ hook
+  const { isAuthenticated } = useSelector(state => state.auth);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
     if (isAuthenticated) {
       console.log("🔄 Utilisateur authentifié, redirection via le RootStack...");
-      // Laissez Redux gérer la navigation via le RootStackScreen.
-      // Vous pouvez également, si vous le souhaitez, utiliser :
-      // navigation.replace("MainStack");
-      // Mais attention : "MainStack" est le nom déclaré dans RootStack, pas "Home".
     }
   }, [isAuthenticated, navigation]);
 
@@ -39,7 +35,8 @@ export default function Login() {
       alert("Veuillez remplir tous les champs !");
       return;
     }
-    dispatch(loginUser(email, password));
+    console.log("📩 Envoi login avec :", email);
+    login({ email, password }); // ✅ appel API
   };
 
   return (
@@ -49,7 +46,7 @@ export default function Login() {
         <KeyboardAvoidingView style={styles.formWrapper} behavior="padding" enabled>
           <View style={styles.formContainer}>
             <Text style={styles.title}>Login</Text>
-            {error && <Text style={styles.errorText}>{error}</Text>}
+            {error && <Text style={styles.errorText}>{error.message || 'Erreur de connexion'}</Text>}
             <AppInput
               placeholder="Email"
               leftIcon={<Icon name="mail-outline" size={20} color="black" />}
@@ -69,10 +66,10 @@ export default function Login() {
               <Text style={styles.forgotPassword}>Forgot Password?</Text>
             </TouchableOpacity>
             <AppButton
-              title={loading ? <ActivityIndicator color="#fff" /> : "LOGIN"}
+              title={isLoading ? <ActivityIndicator color="#fff" /> : "LOGIN"}
               buttonStyle={styles.loginButton}
               onPress={handleLogin}
-              disabled={loading}
+              disabled={isLoading}
             />
             <TouchableOpacity onPress={() => navigation.navigate('Register')}>
               <Text style={styles.registerLink}>Don't have an account? Sign Up</Text>

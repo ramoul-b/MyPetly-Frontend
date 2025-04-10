@@ -1,105 +1,111 @@
-// redux/actions/authActions.js
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { loginStart, loginSuccess, loginFailure, logout } from '../reducers/authReducer';
+import { API_BASE_URL } from '../../config';
+import { saveAuthData, getAuthData, clearAuthData } from '../../utils/authStorage';
+//import { loginStart, loginSuccess, loginFailure, logout } from '../reducers/authReducer';
+import i18n from '../../translations/i18n';
+import { authService } from '../../services/authService';
 
 
-// ✅ TEST : Vérifier si l'API est accessible depuis React Native
-fetch('http://vps-88a3af89.vps.ovh.net:8081/api/v1/login')
-  .then(response => console.log("✅ Test connexion API OK", response))
-  .catch(error => console.log("❌ Impossible de se connecter à l'API", error));
+const loginStart = () => ({ type: 'LOGIN_START' });
+const loginSuccess = (data) => ({ type: 'LOGIN_SUCCESS', payload: data });
+const loginFailure = (error) => ({ type: 'LOGIN_FAILURE', payload: error });
+const logout = () => ({ type: 'LOGOUT' });
 
-// Action pour enregistrer (inscrire) un nouvel utilisateur
+// ✅ Fonction pour afficher les logs seulement en mode développement
+const logDebug = (message, data = null) => {
+  if (__DEV__) {
+    console.log(message, data);
+  }
+};
+
+// ✅ Inscription d'un utilisateur (Register)
 export const registerUser = (name, email, password, passwordConfirmation) => async (dispatch) => {
-  console.log("🟢 Action registerUser déclenchée !");
   dispatch(loginStart());
+  logDebug(i18n.t("auth.register_start"), { name, email });
 
   try {
-    // Appel à l'API pour l'inscription
-    const response = await axios.post('http://vps-88a3af89.vps.ovh.net:8081/api/v1/register', {
+    const data = await authService.register({
       name,
       email,
       password,
-      password_confirmation: passwordConfirmation,  // Utilise le paramètre passé
+      password_confirmation: passwordConfirmation,
     });
-    console.log("✅ Réponse API reçue :", response.data);
 
-    // Supposons que l'API retourne un token et un objet utilisateur
-    if (response.data.access_token && response.data.user) {
-      const { access_token, user } = response.data;
-      console.log("🔐 Utilisateur enregistré :", user);
+    logDebug(i18n.t("auth.api_response"), data);
 
-      // Sauvegarder le token et l'utilisateur dans AsyncStorage
-      await AsyncStorage.setItem('access_token', access_token);
-      await AsyncStorage.setItem('user', JSON.stringify(user));
-
-      // Déclencher l'action de succès (auto-login après inscription)
-      dispatch(loginSuccess({ token: access_token, user }));
+    if (data.access_token && data.user) {
+      await saveAuthData(data.access_token, data.user);
+      dispatch(loginSuccess({ token: data.access_token, user: data.user }));
+      logDebug(i18n.t("auth.register_success"));
     } else {
-      console.log("❌ Réponse API invalide :", response.data);
-      dispatch(loginFailure("Réponse API invalide"));
+      dispatch(loginFailure(i18n.t("auth.invalid_response")));
+      logDebug(i18n.t("auth.invalid_response"), data);
     }
   } catch (error) {
-    console.log("❌ Erreur API lors de l'inscription :", error.response?.data?.message || error.message);
-    dispatch(loginFailure(error.response?.data?.message || "Erreur inconnue"));
+    const errorMessage = error.response?.data?.message || i18n.t("auth.unknown_error");
+    dispatch(loginFailure(errorMessage));
+    logDebug(i18n.t("auth.register_error"), errorMessage);
   }
 };
 
-// Action pour connecter un utilisateur déjà existant
+// ✅ Connexion d'un utilisateur (Login)
 export const loginUser = (email, password) => async (dispatch) => {
-  console.log("🟢 Action loginUser déclenchée !");
   dispatch(loginStart());
+  logDebug(i18n.t("auth.login_start"), { email });
 
   try {
-    console.log("🔍 Envoi d'une requête POST à :", 'http://vps-88a3af89.vps.ovh.net:8081/api/v1/login');
-console.log("🔍 Corps de la requête :", { email, password });
+    logDebug(i18n.t("auth.sending_request"), `${API_BASE_URL}/login`);
+    logDebug(i18n.t("auth.request_body"), { email, password });
 
-    const response = await axios.post('http://vps-88a3af89.vps.ovh.net:8081/api/v1/login', { email, password });
-    console.log("✅ Réponse API reçue :", response.data);
+    const response = await axios.post(`${API_BASE_URL}/login`, { email, password });
+
+    logDebug(i18n.t("auth.api_response"), response.data);
 
     if (response.data.access_token && response.data.user) {
       const { access_token, user } = response.data;
-      console.log("🔐 Utilisateur connecté :", user);
-
-      await AsyncStorage.setItem('access_token', access_token);
-      await AsyncStorage.setItem('user', JSON.stringify(user));
-
+      await saveAuthData(access_token, user);
       dispatch(loginSuccess({ token: access_token, user }));
+      logDebug(i18n.t("auth.login_success"));
     } else {
-      console.log("❌ Réponse API invalide :", response.data);
-      dispatch(loginFailure("Réponse API invalide"));
+      dispatch(loginFailure(i18n.t("auth.invalid_response")));
+      logDebug(i18n.t("auth.invalid_response"), response.data);
     }
   } catch (error) {
-    console.log("❌ Erreur API :", error.response?.data?.message || error.message);
-    dispatch(loginFailure(error.response?.data?.message || "Erreur inconnue"));
+    const errorMessage = error.response?.data?.message || i18n.t("auth.unknown_error");
+    dispatch(loginFailure(errorMessage));
+    logDebug(i18n.t("auth.login_error"), errorMessage);
   }
 };
 
+// ✅ Vérification de la session utilisateur (Check Auth)
 export const checkAuthStatus = () => async (dispatch) => {
   try {
-    const token = await AsyncStorage.getItem('access_token');
-    const userString = await AsyncStorage.getItem('user');
+  const { token, user } = await getAuthData();
+  console.log("📦 Données récupérées :", { token, user });
 
-    if (token && userString) {
-      const user = JSON.parse(userString);
-      console.log("✅ Session restaurée :", user);
+
+    if (token && user) {
+      console.log("✅ Token trouvé, dispatch loginSuccess");
       dispatch(loginSuccess({ token, user }));
+      logDebug(i18n.t("auth.session_restored"), user);
     } else {
-      console.log("🔴 Aucun utilisateur connecté.");
+      console.log("🚫 Pas de token trouvé, dispatch logout");
       dispatch(logout());
+      logDebug(i18n.t("auth.no_user_connected"));
     }
   } catch (error) {
-    console.error("Erreur lors de la vérification de la session :", error);
+    console.error(i18n.t("auth.session_error"), error);
     dispatch(logout());
   }
 };
 
+// ✅ Déconnexion de l'utilisateur (Logout)
 export const logoutUser = () => async (dispatch) => {
   try {
-    await AsyncStorage.removeItem('access_token');
-    await AsyncStorage.removeItem('user');
+    await clearAuthData();
     dispatch(logout());
+    logDebug(i18n.t("auth.logout_success"));
   } catch (error) {
-    console.error("Erreur lors de la déconnexion :", error);
+    console.error(i18n.t("auth.logout_error"), error);
   }
 };
