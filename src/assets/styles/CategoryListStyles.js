@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import Theme from "../constants/Theme";
+import Theme from "../../constants/Theme";
 
 const CategoryListStyles = StyleSheet.create({
   container: {

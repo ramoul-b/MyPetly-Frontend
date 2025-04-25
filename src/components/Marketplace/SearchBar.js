@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import MarketplaceStyles from '../../styles/MarketplaceStyles';
+import MarketplaceStyles from '../../assets/styles/MarketplaceStyles';
 
 const SearchBar = () => {
   return (

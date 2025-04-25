@@ -1,6 +1,6 @@
 // src/styles/InputStyles.js
 import { StyleSheet } from "react-native";
-import Theme from "../constants/Theme";
+import Theme from "../../constants/Theme";
 
 const InputStyles = StyleSheet.create({
   container: {

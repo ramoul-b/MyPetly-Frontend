@@ -19,13 +19,17 @@ const AppContent = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(checkAuthStatus()); // 🔥 obligatoire pour recharger la session
-    SplashScreen.hide();
-
-    setTimeout(() => {
+    const initApp = async () => {
+      console.log("🟡 Initialisation de l'application...");
+      await dispatch(checkAuthStatus()); // ✅ on attend le chargement des données
+      SplashScreen.hide();
       setIsLoading(false);
-    }, 1000);
-  }, []);
+    };
+  
+    initApp();
+  }, [dispatch]);
+  
+  
 
   return (
     <NavigationContainer ref={navigationRef}>

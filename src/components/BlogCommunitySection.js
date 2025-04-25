@@ -1,27 +1,28 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
-import BlogCommunityStyles from '../styles/BlogCommunityStyles';
+import BlogCommunityStyles from '../assets/styles/BlogCommunityStyles';
 
- const blogArticles = [
-    {
-      id: '1',
-      title: "Comment prendre soin d’un chiot ?",
-      image: { uri: "https://images.unsplash.com/photo-1560807707-8cc77767d783" },
-      date: "10 Février 2025",
-    },
-    {
-      id: '2',
-      title: "Les meilleures croquettes pour chiens en 2025",
-      image: { uri: "https://images.pexels.com/photos/4587996/pexels-photo-4587996.jpeg" },
-      date: "8 Février 2025",
-    },
-    {
-      id: '3',
-      title: "Pourquoi adopter un animal de refuge ?",
-      image: { uri: "https://images.pexels.com/photos/774731/pexels-photo-774731.jpeg" },
-      date: "5 Février 2025",
-    },
-  ];
+const upcomingEvents = [
+  {
+    id: '1',
+    title: "Atelier de dressage de chiots",
+    image: { uri: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d" },
+    date: "25 Avril 2025",
+  },
+  {
+    id: '2',
+    title: "Salon du bien‑être animal",
+    image: { uri: "https://images.pexels.com/photos/28561954/pexels-photo-28561954/free-photo-of-close-up-of-a-relaxed-cream-british-shorthair-cat.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" },
+    date: "1 Mai 2025",
+  },
+  {
+    id: '3',
+    title: "Journée Adoption en refuge",
+    image: { uri: "https://images.pexels.com/photos/45170/kittens-cat-cat-puppy-rush-45170.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" },
+    date: "15 Mai 2025",
+  },
+];
+
   
    const communityPosts = [
     {
@@ -48,7 +49,7 @@ import BlogCommunityStyles from '../styles/BlogCommunityStyles';
   ];
   
   
-  export { blogArticles, communityPosts };
+  export { upcomingEvents, communityPosts };
   
 
 const BlogCommunitySection = ({ navigation }) => {
@@ -56,7 +57,7 @@ const BlogCommunitySection = ({ navigation }) => {
     <View style={BlogCommunityStyles.container}>
       {/* Section Blog */}
       <View style={BlogCommunityStyles.header}>
-        <Text style={BlogCommunityStyles.title}>Blog</Text>
+        <Text style={BlogCommunityStyles.title}>Upcoming Events</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Blog')}>
           <Text style={BlogCommunityStyles.seeAll}>See All</Text>
         </TouchableOpacity>
@@ -64,7 +65,7 @@ const BlogCommunitySection = ({ navigation }) => {
       
       <FlatList
         horizontal
-        data={blogArticles}
+        data={upcomingEvents}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity 

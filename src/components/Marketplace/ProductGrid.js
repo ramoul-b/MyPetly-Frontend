@@ -1,6 +1,6 @@
 import React from 'react';
 import { FlatList } from 'react-native';
-import MarketplaceStyles from '../../styles/MarketplaceStyles';
+import MarketplaceStyles from '../../assets/styles/MarketplaceStyles';
 import ProductCard from './ProductCard';
 
 const ProductGrid = ({ products }) => {

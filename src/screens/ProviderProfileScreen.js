@@ -9,7 +9,7 @@ import Reviews from '../components/ProviderProfile/Reviews';
 import NearbyVets from '../components/ProviderProfile/NearbyVets';
 import MapSection from '../components/ProviderProfile/MapSection';
 import BookingButton from '../components/ProviderProfile/BookingButton';
-import ProviderProfileStyles from '../styles/ProviderProfileStyles';
+import ProviderProfileStyles from '../assets/styles/ProviderProfileStyles';
 import HighlightedReview from '../components/ProviderProfile/HighlightedReview';
 
 // Import de l'image du vétérinaire

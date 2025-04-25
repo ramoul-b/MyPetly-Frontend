@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { API_BASE_URL } from '../../config';
-import { saveAuthData, getAuthData, clearAuthData } from '../../utils/authStorage';
-//import { loginStart, loginSuccess, loginFailure, logout } from '../reducers/authReducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { saveToken, getToken, clearToken } from '../../services/tokenStorage';
 import i18n from '../../translations/i18n';
 import { authService } from '../../services/authService';
-
 
 const loginStart = () => ({ type: 'LOGIN_START' });
 const loginSuccess = (data) => ({ type: 'LOGIN_SUCCESS', payload: data });
@@ -18,7 +17,7 @@ const logDebug = (message, data = null) => {
   }
 };
 
-// ✅ Inscription d'un utilisateur (Register)
+// ✅ Enregistrement de l’utilisateur
 export const registerUser = (name, email, password, passwordConfirmation) => async (dispatch) => {
   dispatch(loginStart());
   logDebug(i18n.t("auth.register_start"), { name, email });
@@ -34,7 +33,8 @@ export const registerUser = (name, email, password, passwordConfirmation) => asy
     logDebug(i18n.t("auth.api_response"), data);
 
     if (data.access_token && data.user) {
-      await saveAuthData(data.access_token, data.user);
+      await saveToken(data.access_token);
+      await AsyncStorage.setItem('user', JSON.stringify(data.user));
       dispatch(loginSuccess({ token: data.access_token, user: data.user }));
       logDebug(i18n.t("auth.register_success"));
     } else {
@@ -48,23 +48,23 @@ export const registerUser = (name, email, password, passwordConfirmation) => asy
   }
 };
 
-// ✅ Connexion d'un utilisateur (Login)
+// ✅ Connexion utilisateur
 export const loginUser = (email, password) => async (dispatch) => {
   dispatch(loginStart());
   logDebug(i18n.t("auth.login_start"), { email });
 
   try {
-    logDebug(i18n.t("auth.sending_request"), `${API_BASE_URL}/login`);
-    logDebug(i18n.t("auth.request_body"), { email, password });
-
     const response = await axios.post(`${API_BASE_URL}/login`, { email, password });
-
     logDebug(i18n.t("auth.api_response"), response.data);
 
     if (response.data.access_token && response.data.user) {
       const { access_token, user } = response.data;
-      await saveAuthData(access_token, user);
+      await saveToken(access_token); // 🔥 Ce log ne s'affiche pas actuellement => problème ici
+      console.log("💾 Sauvegarde du token :", access_token); // Ajoute ce log ici
+    
+      await AsyncStorage.setItem('user', JSON.stringify(user));
       dispatch(loginSuccess({ token: access_token, user }));
+
       logDebug(i18n.t("auth.login_success"));
     } else {
       dispatch(loginFailure(i18n.t("auth.invalid_response")));
@@ -77,32 +77,32 @@ export const loginUser = (email, password) => async (dispatch) => {
   }
 };
 
-// ✅ Vérification de la session utilisateur (Check Auth)
 export const checkAuthStatus = () => async (dispatch) => {
   try {
-  const { token, user } = await getAuthData();
-  console.log("📦 Données récupérées :", { token, user });
+    const token = await getToken();
+    const userString = await AsyncStorage.getItem('user');
+    const user = userString ? JSON.parse(userString) : null;
 
+    console.log("📦 Données récupérées depuis AsyncStorage :", { token, user });
 
     if (token && user) {
-      console.log("✅ Token trouvé, dispatch loginSuccess");
       dispatch(loginSuccess({ token, user }));
-      logDebug(i18n.t("auth.session_restored"), user);
     } else {
-      console.log("🚫 Pas de token trouvé, dispatch logout");
+      console.log("🚫 Pas de token ou user, on logout");
       dispatch(logout());
-      logDebug(i18n.t("auth.no_user_connected"));
     }
   } catch (error) {
-    console.error(i18n.t("auth.session_error"), error);
+    console.error("❌ Erreur checkAuthStatus :", error);
     dispatch(logout());
   }
 };
 
-// ✅ Déconnexion de l'utilisateur (Logout)
+
+// ✅ Déconnexion
 export const logoutUser = () => async (dispatch) => {
   try {
-    await clearAuthData();
+    await clearToken();
+    await AsyncStorage.removeItem('user');
     dispatch(logout());
     logDebug(i18n.t("auth.logout_success"));
   } catch (error) {

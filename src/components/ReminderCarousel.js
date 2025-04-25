@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import AppIcon from './AppIcon';
-import ReminderBarStyles from '../styles/ReminderBarStyles';
+import ReminderBarStyles from '../assets/styles/ReminderBarStyles';
 
 const reminders = [
   { id: '1', type: 'appointment', message: "RDV Vétérinaire", icon: "calendar-outline", color: "#5E72E4" },

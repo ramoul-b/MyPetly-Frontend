@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Image } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ProviderProfileStyles from '../../styles/ProviderProfileStyles';
+import ProviderProfileStyles from '../../assets/styles/ProviderProfileStyles';
 
 const MapSection = ({ location, name }) => {
   return (

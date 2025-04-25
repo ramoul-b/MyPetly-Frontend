@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ProviderProfileStyles from '../../styles/ProviderProfileStyles';
+import ProviderProfileStyles from '../../assets/styles/ProviderProfileStyles';
 
 const NearbyVets = ({ vets }) => (
   <View style={ProviderProfileStyles.nearbyVetsContainer}>

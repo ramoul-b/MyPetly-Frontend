@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import MarketplaceStyles from '../../styles/MarketplaceStyles';
+import MarketplaceStyles from '../../assets/styles/MarketplaceStyles';
 
 const ProductCard = ({ product }) => {
   return (

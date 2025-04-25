@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 
 import { useNavigation } from '@react-navigation/native';
 import AppHeader from '../components/AppHeader';
 import ImagePickerComponent from '../components/ImagePickerComponent'; // Import du composant
+import { animalService } from '../services/animalService';
 
 const AddPetScreen = () => {
     const navigation = useNavigation();
@@ -26,12 +27,41 @@ const AddPetScreen = () => {
         setPetData({ ...petData, photo: imageUri });
     };
 
-    // Envoi du formulaire
-    const handleSubmit = () => {
-        console.log('Animal ajouté:', petData);
-        // Envoyer les données au backend ici
-        navigation.goBack();
+   const handleSubmit = async () => {
+  try {
+    // Prépare les données
+    const formData = {
+      name: petData.name,
+      species: petData.species,
+      breed: petData.breed,
+      birthdate: petData.birthdate,
+      gender: petData.gender,
+      size: petData.size,
     };
+
+    // Envoi de l’animal sans image
+    const addedAnimal = await animalService.addAnimal(formData);
+    console.log("✅ Animal ajouté :", addedAnimal);
+
+    // Si image sélectionnée, upload
+    if (petData.photo) {
+      const imageData = {
+        uri: petData.photo,
+        type: 'image/jpeg',
+        fileName: 'animal_image.jpg',
+      };
+
+      await animalService.uploadAnimalImage(addedAnimal.id, imageData);
+      console.log("📷 Image uploadée avec succès");
+    }
+
+    navigation.goBack();
+  } catch (error) {
+    console.error("❌ Erreur lors de l'ajout :", error);
+    alert("Erreur lors de l’ajout de l’animal");
+  }
+};
+
 
     return (
         <View style={styles.container}>

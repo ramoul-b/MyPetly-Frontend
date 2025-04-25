@@ -1,6 +1,6 @@
 // src/styles/HomeStyles.js
 import { StyleSheet } from "react-native";
-import Theme from "../constants/Theme";
+import Theme from "../../constants/Theme";
 
 const HomeStyles = StyleSheet.create({
   container: {

@@ -41,8 +41,8 @@ const AppHeader = () => {
         ) : null
       }
       centerComponent={{ 
-  text: <Text>{user ? t('home.title', { name: user.name }) : t('home.title', { name: '...' })}</Text>, 
-  style: { color: '#fff', fontSize: 18 }
+  text: <Text style={{color: '#fff', fontSize: 18}}>{user ? t('home.title', { name: user.name }) : t('home.title', { name: '...' })}</Text>, 
+  
 }}
 
       rightComponent={

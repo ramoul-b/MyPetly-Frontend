@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient'; // Dégradé
-import ProviderProfileStyles from '../../styles/ProviderProfileStyles';
+import ProviderProfileStyles from '../../assets/styles/ProviderProfileStyles';
 
 const ProfileHeader = ({ name, specialty, experience, rating, reviews, price, distance, image }) => {
   const navigation = useNavigation();

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ProviderProfileStyles from '../../styles/ProviderProfileStyles';
+import ProviderProfileStyles from '../../assets/styles/ProviderProfileStyles';
 
 const days = [
   { id: '1', day: '6', label: 'Sun' },

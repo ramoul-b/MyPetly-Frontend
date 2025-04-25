@@ -11,6 +11,7 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(async (config) => {
   const token = await getToken();
+  console.log("🟡 Token envoyé dans l'entête :", token);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

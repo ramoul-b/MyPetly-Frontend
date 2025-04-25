@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import Theme from "../constants/Theme";
+import Theme from "../../constants/Theme";
 
 const AdBannerStyles = StyleSheet.create({
   container: {
@@ -8,7 +8,7 @@ const AdBannerStyles = StyleSheet.create({
   },
   banner: {
     width: "100%",
-    height: 165,
+    height: 200,
     borderRadius: 10,
     backgroundColor: Theme.COLORS.SECONDARY,
   },

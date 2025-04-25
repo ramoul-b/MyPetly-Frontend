@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ProviderProfileStyles from '../../styles/ProviderProfileStyles';
+import ProviderProfileStyles from '../../assets/styles/ProviderProfileStyles';
 
 const Reviews = ({ reviews, onWriteReview }) => (
   <View style={ProviderProfileStyles.reviewsSectionContainer}>

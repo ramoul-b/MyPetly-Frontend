@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import ProviderProfileStyles from '../../styles/ProviderProfileStyles';
+import ProviderProfileStyles from '../../assets/styles/ProviderProfileStyles';
 
 const Biography = ({ bio }) => (
   <View style={ProviderProfileStyles.biographyContainer}>

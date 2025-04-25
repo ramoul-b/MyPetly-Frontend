@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
-import MarketplaceStyles from '../../styles/MarketplaceStyles';
+import MarketplaceStyles from '../../assets/styles/MarketplaceStyles';
 
 const categories = [
   { id: '1', name: 'Nourriture 🍖' },
