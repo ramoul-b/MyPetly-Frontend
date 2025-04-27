@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
 const InputSlider = ({ label, value, onChange, unit = 'kg', min = 0, max = 50, step = 1 }) => {
+  
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
@@ -12,7 +13,7 @@ const InputSlider = ({ label, value, onChange, unit = 'kg', min = 0, max = 50, s
       </View>
 
       <MultiSlider
-        values={[parseFloat(value)]} // <<< ICI on force la valeur correcte
+        values={[parseFloat(value)]}
         min={min}
         max={max}
         step={step}

@@ -8,15 +8,17 @@ import {
   Switch,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next'; // ✅ ajouté
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { animalService } from '../services/animalService';
-
 import InputField from '../components/formFields/InputField';
 import InputSelect from '../components/formFields/InputSelect';
 import InputDate from '../components/formFields/InputDate';
 import InputGender from '../components/formFields/InputGender';
 import InputSlider from '../components/formFields/InputSlider';
 import ProfileImagePicker from '../components/formFields/ProfileImagePicker';
+import { useAnimals } from '../hooks/useAnimals';
+import EventBus from '../utils/EventBus';
 
 const SPECIES_OPTIONS = [
   { label: 'Chien', value: 'chien' },
@@ -32,11 +34,13 @@ const BREED_OPTIONS = [
 const COLLAR_OPTIONS = [
   { label: 'GPS', value: 'GPS' },
   { label: 'NFC', value: 'NFC' },
-  { label: 'Aucun', value: 'none' },
+  { label: 'none', value: 'none' },
 ];
 
 const EditPetScreen = () => {
+  const { t } = useTranslation(); // ✅ hook pour traduction
   const navigation = useNavigation();
+  const { fetchAnimals } = useAnimals();
   const route = useRoute();
   const { petId } = route.params;
 
@@ -56,49 +60,45 @@ const EditPetScreen = () => {
     identification_number: '',
     photo: '',
   });
+
   const handleImageSelected = async (uri) => {
     try {
-
-
-      // pré-affiche la photo locale pour le feedback instantané
       const localUri = Platform.OS === 'ios' && !uri.startsWith('file://')
-      ? `file://${uri}`
-      : uri;
-      console.log('[UPLOAD] local uri :', localUri);
+        ? `file://${uri}`
+        : uri;
       handleChange('photo', localUri);
-  
+
       const res = await animalService.uploadAnimalImage(petId, {
         uri: localUri,
         type: 'image/jpeg',
         fileName: `animal_${petId}.jpg`,
       });
-    
-      console.log('[UPLOAD] réponse API :', res.photo_url);
-      // remplace par l’URL retournée pour un affichage distant
+
       handleChange('photo', res.photo_url);
+      EventBus.emit('refreshAnimals');
+
     } catch (e) {
       console.error('Erreur upload image', e);
-      alert('Erreur lors de l’upload de l’image');
+      alert(t('common.upload_error'));
     }
   };
-  
-  
+
   useEffect(() => {
     async function fetchAnimal() {
       try {
         const data = await animalService.getAnimal(petId);
-        console.log('[SCREEN] reçu :', data);
         setForm({
           ...data,
+          gender: data.sex,
           photo: data.photo_url,
         });
       } catch (error) {
         console.error('Erreur chargement animal', error);
-        alert('Erreur de chargement');
+        alert(t('common.loading_error'));
       }
     }
     fetchAnimal();
-  }, [petId]);
+  }, [petId, t]);
 
   const handleChange = (field, value) => {
     setForm(prev => ({ ...prev, [field]: value }));
@@ -106,7 +106,6 @@ const EditPetScreen = () => {
 
   const handleSave = async () => {
     try {
-      // Nettoyer proprement
       const {
         name,
         species,
@@ -119,7 +118,7 @@ const EditPetScreen = () => {
         identification_number,
         collar_type,
         status,
-      } = form; // Extraire uniquement les bons champs
+      } = form;
   
       const dataToSend = {
         name,
@@ -134,21 +133,17 @@ const EditPetScreen = () => {
         collar_type,
         status,
       };
-  
-      console.log('[SAVE] Données envoyées :', dataToSend);
-  
+
       await animalService.updateAnimal(petId, dataToSend);
-  
-      alert('Animal mis à jour');
+
+      alert(t('common.update_success'));
       navigation.goBack();
-      
+
     } catch (error) {
       console.error('Erreur update', error);
-      alert('Erreur lors de la mise à jour');
+      alert(t('common.update_error'));
     }
   };
-  
-  
 
   return (
     <ScrollView style={styles.container}>
@@ -156,26 +151,31 @@ const EditPetScreen = () => {
         <Icon name="arrow-left" size={24} color="#333" />
       </TouchableOpacity>
 
-      <Text style={styles.header}>Modifier l’animal</Text>
+      <Text style={styles.header}>{t('pet.edit_pet')}</Text>
 
       <ProfileImagePicker image={form.photo} onImageSelected={handleImageSelected} />
 
-      <Section title="Informations générales">
-        <InputField label="Nom" value={form.name} onChangeText={val => handleChange('name', val)} />
-        <InputSelect label="Espèce" value={form.species} onValueChange={val => handleChange('species', val)} items={SPECIES_OPTIONS} />
-        <InputSelect label="Race" value={form.breed} onValueChange={val => handleChange('breed', val)} items={BREED_OPTIONS} />
+      <Section title={t('pet.general_info')}>
+        <InputField label={t('pet.name')} value={form.name} onChangeText={val => handleChange('name', val)} />
+        <InputSelect label={t('pet.species')} value={form.species} onValueChange={val => handleChange('species', val)} items={SPECIES_OPTIONS} />
+        <InputSelect label={t('pet.breed')} value={form.breed} onValueChange={val => handleChange('breed', val)} items={BREED_OPTIONS} />
         <InputGender value={form.gender} onChange={val => handleChange('gender', val)} />
-        <InputField label="Couleur" value={form.color} onChangeText={val => handleChange('color', val)} />
-        <InputDate label="Date de naissance" value={form.birth_date} onChange={val => handleChange('birth_date', val)} />
-        <InputSlider value={form.weight} onChange={val => handleChange('weight', val)} />
-        <InputField label="Taille (cm)" value={form.height} onChangeText={val => handleChange('height', val)} />
-        <InputField label="N° d'identification" value={form.identification_number} onChangeText={val => handleChange('identification_number', val)} />
+        <InputField label={t('pet.color')} value={form.color} onChangeText={val => handleChange('color', val)} />
+        <InputDate label={t('pet.birthdate')} value={form.birth_date} onChange={val => handleChange('birth_date', val)} />
+        <InputSlider
+          value={isNaN(form.weight) ? 0 : Number(form.weight)}
+          onChange={val => handleChange('weight', val)}
+        />
+        <InputField label={t('pet.height')} value={form.height} onChangeText={val => handleChange('height', val)} />
+        <InputField label={t('pet.identification_number')} value={form.identification_number} onChangeText={val => handleChange('identification_number', val)} />
       </Section>
 
-      <Section title="Collier & Statut">
-        <InputSelect label="Type de collier" value={form.collar_type} onValueChange={val => handleChange('collar_type', val)} items={COLLAR_OPTIONS} />
+      <Section title={t('pet.collar_status')}>
+        <InputSelect label={t('pet.collar_type')} value={form.collar_type} onValueChange={val => handleChange('collar_type', val)} items={COLLAR_OPTIONS} />
         <View style={styles.switchRow}>
-          <Text style={styles.switchLabel}>Statut: {form.status === 'active' ? 'Actif' : 'Perdu'}</Text>
+          <Text style={styles.switchLabel}>
+            {t('pet.status')}: {form.status === 'active' ? t('pet.active') : t('pet.lost')}
+          </Text>
           <Switch
             value={form.status === 'active'}
             onValueChange={() => handleChange('status', form.status === 'active' ? 'lost' : 'active')}
@@ -183,13 +183,8 @@ const EditPetScreen = () => {
         </View>
       </Section>
 
-      <Section title="Suivi santé">
-        <InputDate label="Dernier vaccin" value={form.last_vaccine} onChange={val => handleChange('last_vaccine', val)} />
-        <InputDate label="Prochain rendez-vous" value={form.next_appointment} onChange={val => handleChange('next_appointment', val)} />
-      </Section>
-
       <TouchableOpacity style={styles.button} onPress={handleSave}>
-        <Text style={styles.buttonText}>Sauvegarder</Text>
+        <Text style={styles.buttonText}>{t('common.save')}</Text>
       </TouchableOpacity>
     </ScrollView>
   );

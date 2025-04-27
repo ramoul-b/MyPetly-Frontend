@@ -13,13 +13,27 @@ export const useAnimals = () => {
     setError(null);
     try {
       const data = await animalService.getAnimals();
-      setAnimals(data);
+      console.log('[useAnimals] Données récupérées :', data);
+  
+      // Mapping propre ici
+      const mapped = data.map(animal => ({
+        id: animal.id,
+        name: animal.name,
+        species: animal.species,
+        breed: animal.breed,
+        birthdate: animal.birth_date || '-',   // 🛠️ mapper bien birth_date -> birthdate
+        status: animal.status,
+        photo: animal.photo_url || null,        // 🛠️ mapper bien photo_url -> photo
+      }));
+  
+      setAnimals(mapped);
     } catch (err) {
       setError(err.message || 'Une erreur est survenue lors de la récupération des animaux');
     } finally {
       setLoading(false);
     }
   }, []);
+  
 
   useEffect(() => {
     fetchAnimals();

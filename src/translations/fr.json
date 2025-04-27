@@ -40,5 +40,68 @@
     "session_error": "❌ Erreur lors de la vérification de la session :",
     "logout_success": "✅ Déconnexion réussie !",
     "logout_error": "❌ Erreur lors de la déconnexion :"
-  }
+  },
+"filters": {
+  "all": "Tous",
+  "lost": "Perdus",
+  "active": "Actifs"
+},
+"common": {
+  "loading": "Chargement...",
+  "error_loading": "Erreur de chargement",
+  "no_animals": "Aucun animal trouvé"
+},
+
+"pet": {
+  "general_info": "Informations générales",
+  "health_stats": "Statistiques santé",
+  "health_info": "Infos santé",
+  "health_history": "Historique santé",
+  "upcoming_events": "Évènements à venir",
+  "reminders": "Rappels",
+  "breed": "Race",
+  "gender": "Genre",
+  "birthdate": "Date de naissance",
+  "microchipped": "Puce",
+  "temperature": "Température",
+  "heart_rate": "Rythme",
+  "activity": "Activité",
+  "vaccinated": "Vacciné",
+  "neutered": "Stérilisé",
+  "add_reminders": "Ajoutez des rappels pour les vaccins, coupes, vermifuges... Vous recevrez une notification.",
+  "edit_pet": "Modifier l'animal",
+  "name": "Nom",
+  "species": "Espèce",
+  "breed": "Race",
+  "gender": "Genre",
+  "color": "Couleur",
+  "birthdate": "Date de naissance",
+  "height": "Taille (cm)",
+  "identification_number": "N° d'identification",
+  "collar_status": "Collier & Statut",
+  "collar_type": "Type de collier",
+  "status": "Statut",
+  "active": "Actif",
+  "lost": "Perdu",
+  "save": "Sauvegarder",
+  "upload_error": "Erreur lors de l'upload de l'image",
+  "update_success": "Animal mis à jour",
+  "update_error": "Erreur lors de la mise à jour",
+  "loading_error": "Erreur de chargement"
+},
+"common": {
+  "yes": "Oui",
+  "no": "Non",
+  "add": "Ajouter",
+  "loading": "Chargement...",
+  "not_found": "Animal non trouvé",
+  "no_history": "Aucun historique pour le moment.",
+  "no_events": "Aucun évènement prévu.",
+  "edit_info": "Modifier les informations",
+  "male": "Mâle",
+  "female": "Femelle"
+}
+
+
+  
 }

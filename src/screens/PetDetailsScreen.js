@@ -1,186 +1,179 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Switch,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Switch } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTranslation } from 'react-i18next'; // ✅ ajouter i18n
 import AppHeader from '../components/AppHeader';
-
-const mockPets = [
-  {
-    id: 1,
-    name: 'Max',
-    species: 'Chien',
-    breed: 'Golden Retriever',
-    birthdate: '2021-04-15',
-    status: 'actif',
-    photo: 'https://images.pexels.com/photos/1805164/pexels-photo-1805164.jpeg',
-    collar: 'GPS',
-    gender: 'Male',
-    vaccinated: true,
-    neutered: true,
-    microchipped: true,
-    friendlyWithKids: true,
-    friendlyWithCats: false,
-    healthHistory: [
-      { type: 'Vaccin', title: 'Rage', date: '2023-06-15', note: 'Rappel annuel.' },
-      { type: 'Consultation', title: 'Vétérinaire', date: '2024-02-01', note: 'Contrôle général.' },
-    ],
-    upcomingEvents: [
-      { icon: 'calendar', label: 'Vaccin Rage', date: '2024-06-15' },
-      { icon: 'bell-ring', label: 'Rendez-vous vétérinaire', date: '2024-04-22' },
-      { icon: 'test-tube', label: 'Rappel vermifuge', date: '2024-05-10' },
-    ],
-    stats: {
-      temperature: '38.5°C',
-      heartRate: '90 bpm',
-      activity: 'Modérée',
-    },
-    reminders: [
-  { type: 'Vaccin', label: 'Measles vaccine', date: '2024-05-01', icon: 'needle' },
-  { type: 'Vaccin', label: 'Rabies vaccine', date: '2024-06-10', icon: 'needle' },
-],
-
-  },
-  
-];
+import { animalService } from '../services/animalService';
 
 const PetDetailsScreen = () => {
+  const { t } = useTranslation(); // ✅ hook traduction
   const route = useRoute();
   const navigation = useNavigation();
   const { petId } = route.params;
-  const pet = mockPets.find((p) => p.id === petId);
 
-  if (!pet) return <Text style={styles.error}>Animal non trouvé</Text>;
+  const [pet, setPet] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPet = async () => {
+      try {
+        const data = await animalService.getAnimal(petId);
+        console.log('[PetDetailsScreen] Animal récupéré :', data);
+
+        setPet({
+          id: data.id,
+          name: data.name,
+          species: data.species,
+          breed: data.breed,
+          birthdate: data.birthdate,
+          status: data.status,
+          photo: data.photo_url,
+          collar: data.collar_type,
+          gender: data.sex || t('common.male'), // fallback traduit
+          vaccinated: true,  
+          neutered: true,    
+          microchipped: true,
+          friendlyWithKids: true,
+          friendlyWithCats: false,
+          healthHistory: [],
+          upcomingEvents: [],
+          stats: { temperature: '-', heartRate: '-', activity: '-' },
+          reminders: [],
+        });
+
+      } catch (error) {
+        console.error('Erreur chargement animal :', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPet();
+  }, [petId, t]);
+
+  if (loading) return <Text style={styles.error}>{t('common.loading')}</Text>;
+  if (!pet) return <Text style={styles.error}>{t('common.not_found')}</Text>;
 
   return (
     <View style={styles.container}>
-      <AppHeader title="Mon animal" navigation={navigation} />
+      <AppHeader title={t('profile.my_pets')} navigation={navigation} />
+
       <TouchableOpacity
-  style={{  position: 'absolute', top: 70, left: 20, zIndex: 1,  }}
-  onPress={() => navigation.goBack()}
->
-  <Icon name="arrow-left" size={28} color="#fff" />
-</TouchableOpacity>
+        style={{ position: 'absolute', top: 70, left: 20, zIndex: 1 }}
+        onPress={() => navigation.goBack()}
+      >
+        <Icon name="arrow-left" size={28} color="#fff" />
+      </TouchableOpacity>
 
       <ScrollView contentContainerStyle={styles.content}>
-        {/* Dashboard Animal */}
+        
+        {/* Avatar */}
         <View style={styles.avatarBlock}>
-  <View style={styles.avatarWrapper}>
-    <Image source={{ uri: pet.photo }} style={styles.avatar} />
-    <TouchableOpacity style={styles.addPhotoIcon}>
-      <Icon name="plus-circle" size={28} color="#5E72E4" />
-    </TouchableOpacity>
-  </View>
-  <Text style={styles.petName}>{pet.name}</Text>
-  <Text style={styles.petSpecies}>{pet.species}</Text>
+          <View style={styles.avatarWrapper}>
+            <Image source={{ uri: pet.photo }} style={styles.avatar} />
+          </View>
+          <Text style={styles.petName}>{pet.name}</Text>
+          <Text style={styles.petSpecies}>{pet.species}</Text>
 
-  <View style={styles.petMetaRow}>
-    <Text style={styles.status}>🟢 ACTIF</Text>
-    <View style={styles.collarBadge}>
-      <Icon name="map-marker-radius" size={18} color="#fff" />
-      <Text style={styles.badgeText}>GPS</Text>
-    </View>
-  </View>
-</View>
-
-
-        {/* Informations générales */}
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Informations générales</Text>
-          <InfoRow label="Race" value={pet.breed} />
-          <InfoRow label="Genre" value={pet.gender} />
-          <InfoRow label="Date de naissance" value={pet.birthdate} />
-          <InfoRow label="Puce" value={pet.microchipped ? 'Oui' : 'Non'} />
-        </View>
-        {/* Statistiques santé */}
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Statistiques santé</Text>
-          <View style={styles.statsRow}>
-            <View style={styles.statCard}>
-              <Icon name="thermometer" size={24} color="#E63946" />
-              <Text style={styles.statLabel}>Température</Text>
-              <Text style={styles.statValue}>{pet.stats.temperature}</Text>
-            </View>
-            <View style={styles.statCard}>
-              <Icon name="heart-pulse" size={24} color="#E63946" />
-              <Text style={styles.statLabel}>Rythme</Text>
-              <Text style={styles.statValue}>{pet.stats.heartRate}</Text>
-            </View>
-            <View style={styles.statCard}>
-              <Icon name="run" size={24} color="#E63946" />
-              <Text style={styles.statLabel}>Activité</Text>
-              <Text style={styles.statValue}>{pet.stats.activity}</Text>
+          <View style={styles.petMetaRow}>
+            <Text style={styles.status}>{pet.status?.toUpperCase()}</Text>
+            <View style={styles.collarBadge}>
+              <Icon name="map-marker-radius" size={18} color="#fff" />
+              <Text style={styles.badgeText}>{pet.collar}</Text>
             </View>
           </View>
         </View>
+
+        {/* Informations générales */}
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>{t('pet.general_info')}</Text>
+          <InfoRow label={t('pet.breed')} value={pet.breed} />
+          <InfoRow label={t('pet.gender')} value={pet.gender} />
+          <InfoRow label={t('pet.birthdate')} value={pet.birthdate || '--'} />
+          <InfoRow label={t('pet.microchipped')} value={pet.microchipped ? t('common.yes') : t('common.no')} />
+        </View>
+
+        {/* Statistiques santé */}
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>{t('pet.health_stats')}</Text>
+          <View style={styles.statsRow}>
+            <StatCard icon="thermometer" label={t('pet.temperature')} value={pet.stats.temperature} />
+            <StatCard icon="heart-pulse" label={t('pet.heart_rate')} value={pet.stats.heartRate} />
+            <StatCard icon="run" label={t('pet.activity')} value={pet.stats.activity} />
+          </View>
+        </View>
+
         {/* Infos supplémentaires */}
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Infos santé</Text>
-          <ToggleRow label="Vacciné" value={pet.vaccinated} />
-          <ToggleRow label="Stérilisé" value={pet.neutered} />
+          <Text style={styles.sectionTitle}>{t('pet.health_info')}</Text>
+          <ToggleRow label={t('pet.vaccinated')} value={pet.vaccinated} />
+          <ToggleRow label={t('pet.neutered')} value={pet.neutered} />
         </View>
 
         {/* Historique santé */}
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Historique santé</Text>
-          {pet.healthHistory.map((item, i) => (
-            <View key={i} style={styles.historyItem}>
-              <Icon name="medical-bag" size={20} color="#5E72E4" />
-              <View style={{ marginLeft: 10 }}>
-                <Text>{item.title} - {item.date}</Text>
-                <Text style={styles.note}>{item.note}</Text>
+          <Text style={styles.sectionTitle}>{t('pet.health_history')}</Text>
+          {pet.healthHistory.length === 0 ? (
+            <Text style={styles.note}>{t('common.no_history')}</Text>
+          ) : (
+            pet.healthHistory.map((item, i) => (
+              <View key={i} style={styles.historyItem}>
+                <Icon name="medical-bag" size={20} color="#5E72E4" />
+                <View style={{ marginLeft: 10 }}>
+                  <Text>{item.title} - {item.date}</Text>
+                  <Text style={styles.note}>{item.note}</Text>
+                </View>
               </View>
-            </View>
-          ))}
+            ))
+          )}
         </View>
 
         {/* Évènements à venir */}
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Évènements à venir</Text>
-          {pet.upcomingEvents.map((event, i) => (
-            <View key={i} style={styles.historyItem}>
-              <Icon name={event.icon} size={20} color="#E76F51" />
-              <Text style={{ marginLeft: 10 }}>{event.label} – {event.date}</Text>
-            </View>
-          ))}
+          <Text style={styles.sectionTitle}>{t('pet.upcoming_events')}</Text>
+          {pet.upcomingEvents.length === 0 ? (
+            <Text style={styles.note}>{t('common.no_events')}</Text>
+          ) : (
+            pet.upcomingEvents.map((event, i) => (
+              <View key={i} style={styles.historyItem}>
+                <Icon name={event.icon} size={20} color="#E76F51" />
+                <Text style={{ marginLeft: 10 }}>{event.label} – {event.date}</Text>
+              </View>
+            ))
+          )}
         </View>
 
+        {/* Rappels */}
         <View style={styles.card}>
-  <Text style={styles.sectionTitle}>Rappels</Text>
-  <Text style={styles.reminderNote}>
-    Ajoutez des rappels pour les vaccins, coupes, vermifuges... Vous recevrez une notification.
-  </Text>
+          <Text style={styles.sectionTitle}>{t('pet.reminders')}</Text>
+          <Text style={styles.reminderNote}>
+            {t('pet.add_reminders')}
+          </Text>
 
-  <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 12 }}>
-    <TouchableOpacity style={styles.reminderCard}>
-      <Icon name="plus-circle" size={30} color="#5E72E4" />
-      <Text style={styles.reminderLabel}>Ajouter</Text>
-    </TouchableOpacity>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 12 }}>
+            <TouchableOpacity style={styles.reminderCard}>
+              <Icon name="plus-circle" size={30} color="#5E72E4" />
+              <Text style={styles.reminderLabel}>{t('common.add')}</Text>
+            </TouchableOpacity>
 
-    {pet.reminders?.map((reminder, i) => (
-      <View key={i} style={styles.reminderCard}>
-        <Icon name={reminder.icon} size={26} color="#5E72E4" />
-        <Text style={styles.reminderLabel}>{reminder.label}</Text>
-        <Text style={styles.reminderDate}>{reminder.date}</Text>
-      </View>
-    ))}
-  </ScrollView>
-</View>
+            {pet.reminders.map((reminder, i) => (
+              <View key={i} style={styles.reminderCard}>
+                <Icon name={reminder.icon} size={26} color="#5E72E4" />
+                <Text style={styles.reminderLabel}>{reminder.label}</Text>
+                <Text style={styles.reminderDate}>{reminder.date}</Text>
+              </View>
+            ))}
+          </ScrollView>
+        </View>
 
-
+        {/* Bouton Edit */}
         <TouchableOpacity
-  style={styles.editBtn}
-  onPress={() => navigation.navigate('EditPet', { petId: pet.id })}
->
-  <Text style={styles.editBtnText}>Modifier les informations</Text>
-</TouchableOpacity>
+          style={styles.editBtn}
+          onPress={() => navigation.navigate('EditPet', { petId: pet.id })}
+        >
+          <Text style={styles.editBtnText}>{t('common.edit_info')}</Text>
+        </TouchableOpacity>
 
       </ScrollView>
     </View>
@@ -198,6 +191,14 @@ const ToggleRow = ({ label, value }) => (
   <View style={styles.toggleRow}>
     <Text style={styles.infoLabel}>{label}</Text>
     <Switch value={value} disabled />
+  </View>
+);
+
+const StatCard = ({ icon, label, value }) => (
+  <View style={styles.statCard}>
+    <Icon name={icon} size={24} color="#E63946" />
+    <Text style={styles.statLabel}>{label}</Text>
+    <Text style={styles.statValue}>{value}</Text>
   </View>
 );
 

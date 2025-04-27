@@ -40,5 +40,66 @@
     "session_error": "❌ Errore durante il controllo della sessione:",
     "logout_success": "✅ Disconnessione avvenuta con successo!",
     "logout_error": "❌ Errore durante la disconnessione:"
-  }
+  },
+  "filters": {
+  "all": "Tutti",
+  "lost": "Persi",
+  "active": "Attivi"
+},
+"common": {
+  "loading": "Caricamento...",
+  "error_loading": "Errore durante il caricamento",
+  "no_animals": "Nessun animale trovato"
+},
+"pet": {
+  "general_info": "Informazioni generali",
+  "health_stats": "Statistiche di salute",
+  "health_info": "Informazioni di salute",
+  "health_history": "Storico salute",
+  "upcoming_events": "Eventi futuri",
+  "reminders": "Promemoria",
+  "breed": "Razza",
+  "gender": "Genere",
+  "birthdate": "Data di nascita",
+  "microchipped": "Microchip",
+  "temperature": "Temperatura",
+  "heart_rate": "Battito cardiaco",
+  "activity": "Attività",
+  "vaccinated": "Vaccinato",
+  "neutered": "Sterilizzato",
+  "add_reminders": "Aggiungi promemoria per vaccini, toelettatura, sverminazione... Riceverai una notifica.",
+  "edit_pet": "Edit Pet",
+  "name": "Name",
+  "species": "Species",
+  "breed": "Breed",
+  "gender": "Gender",
+  "color": "Color",
+  "birthdate": "Birthdate",
+  "height": "Height (cm)",
+  "identification_number": "Identification Number",
+  "collar_status": "Collar & Status",
+  "collar_type": "Collar Type",
+  "status": "Status",
+  "active": "Active",
+  "lost": "Lost"
+},
+"common": {
+  "yes": "Sì",
+  "no": "No",
+  "add": "Aggiungi",
+  "loading": "Caricamento...",
+  "not_found": "Animale non trovato",
+  "no_history": "Nessuna cronologia disponibile.",
+  "no_events": "Nessun evento programmato.",
+  "edit_info": "Modifica informazioni",
+  "male": "Maschio",
+  "female": "Femmina",
+  "save": "Save",
+  "upload_error": "Error uploading image",
+  "update_success": "Animal updated successfully",
+  "update_error": "Error updating animal",
+  "loading_error": "Error loading data"
+}
+
+
 }
