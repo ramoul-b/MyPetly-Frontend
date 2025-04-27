@@ -65,7 +65,7 @@ export const animalService = {
         name: imageData.fileName || 'animal_image.jpg',
       });
 
-      const response = await apiClient.post(`${ANIMAL_ENDPOINT}/${id}/image`, formData, {
+      const response = await apiClient.post(`${ANIMAL_ENDPOINT}/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

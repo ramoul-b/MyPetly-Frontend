@@ -1,134 +1,129 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AppHeader from '../components/AppHeader';
-import ImagePickerComponent from '../components/ImagePickerComponent'; // Import du composant
+import ProfileImagePicker from '../components/formFields/ProfileImagePicker';
+import InputField from '../components/formFields/InputField';
+import InputSelect from '../components/formFields/InputSelect';
+import InputDate from '../components/formFields/InputDate';
+import InputGender from '../components/formFields/InputGender';
+import InputWeightSlider from '../components/formFields/InputSlider';
 import { animalService } from '../services/animalService';
 
+const SPECIES_OPTIONS = [
+  { label: 'Chien', value: 'chien' },
+  { label: 'Chat', value: 'chat' },
+];
+
+const BREED_OPTIONS = [
+  { label: 'Labrador', value: 'labrador' },
+  { label: 'Siamois', value: 'siamois' },
+];
+
+const SIZE_OPTIONS = [
+  { label: 'Petit', value: 'Petit' },
+  { label: 'Moyen', value: 'Moyen' },
+  { label: 'Grand', value: 'Grand' },
+];
+
 const AddPetScreen = () => {
-    const navigation = useNavigation();
-    const [petData, setPetData] = useState({
-        name: '',
-        species: '',
-        breed: '',
-        birthdate: '',
-        gender: '',
-        size: '',
-        photo: null,
-    });
+  const navigation = useNavigation();
+  const [petData, setPetData] = useState({
+    name: '',
+    species: '',
+    breed: '',
+    birthdate: '',
+    gender: 'male',
+    size: '',
+    color: '',
+    weight: 0,
+    height: '',
+    identification_number: '',
+    photo: null,
+  });
 
-    // Mise à jour des champs
-    const handleInputChange = (field, value) => {
-        setPetData({ ...petData, [field]: value });
-    };
+  const handleInputChange = (field, value) => {
+    setPetData({ ...petData, [field]: value });
+  };
 
-    // Fonction pour récupérer la photo sélectionnée
-    const handleImageSelected = (imageUri) => {
-        setPetData({ ...petData, photo: imageUri });
-    };
+  const handleImageSelected = (imageUri) => {
+    if (!imageUri) return;
+    setPetData({ ...petData, photo: imageUri });
+  };
 
-   const handleSubmit = async () => {
-  try {
-    // Prépare les données
-    const formData = {
-      name: petData.name,
-      species: petData.species,
-      breed: petData.breed,
-      birthdate: petData.birthdate,
-      gender: petData.gender,
-      size: petData.size,
-    };
+  const handleSubmit = async () => {
+    try {
+      const { photo, ...formData } = petData;
+      const addedAnimal = await animalService.addAnimal(formData);
 
-    // Envoi de l’animal sans image
-    const addedAnimal = await animalService.addAnimal(formData);
-    console.log("✅ Animal ajouté :", addedAnimal);
+      if (photo) {
+        const imageData = {
+          uri: photo,
+          type: 'image/jpeg',
+          fileName: `animal_${addedAnimal.id}.jpg`,
+        };
+        await animalService.uploadAnimalImage(addedAnimal.id, imageData);
+      }
 
-    // Si image sélectionnée, upload
-    if (petData.photo) {
-      const imageData = {
-        uri: petData.photo,
-        type: 'image/jpeg',
-        fileName: 'animal_image.jpg',
-      };
-
-      await animalService.uploadAnimalImage(addedAnimal.id, imageData);
-      console.log("📷 Image uploadée avec succès");
+      navigation.goBack();
+    } catch (error) {
+      console.error("❌ Erreur lors de l'ajout :", error);
+      alert("Erreur lors de l’ajout de l’animal");
     }
+  };
 
-    navigation.goBack();
-  } catch (error) {
-    console.error("❌ Erreur lors de l'ajout :", error);
-    alert("Erreur lors de l’ajout de l’animal");
-  }
+  return (
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+      <AppHeader title="Ajouter un Animal" navigation={navigation} />
+      <ScrollView style={{ padding: 16 }}>
+        <ProfileImagePicker image={petData.photo} onImageSelected={handleImageSelected} />
+
+        <Section title="Informations générales">
+          <InputField label="Nom" value={petData.name} onChangeText={val => handleInputChange('name', val)} />
+          <InputSelect label="Espèce" value={petData.species} onValueChange={val => handleInputChange('species', val)} items={SPECIES_OPTIONS} />
+          <InputSelect label="Race" value={petData.breed} onValueChange={val => handleInputChange('breed', val)} items={BREED_OPTIONS} />
+          <InputGender value={petData.gender} onChange={val => handleInputChange('gender', val)} />
+          <InputField label="Couleur" value={petData.color} onChangeText={val => handleInputChange('color', val)} />
+          <InputDate label="Date de naissance" value={petData.birthdate} onChange={val => handleInputChange('birthdate', val)} />
+          <InputWeightSlider value={petData.weight} onChange={val => handleInputChange('weight', val)} />
+          <InputField label="Taille (cm)" value={petData.height} onChangeText={val => handleInputChange('height', val)} keyboardType="numeric" />
+          <InputField label="N° d'identification" value={petData.identification_number} onChangeText={val => handleInputChange('identification_number', val)} />
+        </Section>
+
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Ajouter</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
+  );
 };
 
-
-    return (
-        <View style={styles.container}>
-            <AppHeader title="Ajouter un Animal" navigation={navigation} />
-
-            <ScrollView contentContainerStyle={styles.form}>
-                {/* Sélection de la Photo */}
-                <ImagePickerComponent onImageSelected={handleImageSelected} />
-
-                {/* Nom */}
-                <Text style={styles.label}>Nom de l’animal</Text>
-                <TextInput style={styles.input} placeholder="Ex: Buddy" value={petData.name} onChangeText={(text) => handleInputChange('name', text)} />
-
-                {/* Espèce */}
-                <Text style={styles.label}>Espèce</Text>
-                <TextInput style={styles.input} placeholder="Ex: Chien, Chat..." value={petData.species} onChangeText={(text) => handleInputChange('species', text)} />
-
-                {/* Race */}
-                <Text style={styles.label}>Race</Text>
-                <TextInput style={styles.input} placeholder="Ex: Labrador, Siamois..." value={petData.breed} onChangeText={(text) => handleInputChange('breed', text)} />
-
-                {/* Date de naissance */}
-                <Text style={styles.label}>Date de naissance</Text>
-                <TextInput style={styles.input} placeholder="YYYY-MM-DD" value={petData.birthdate} onChangeText={(text) => handleInputChange('birthdate', text)} />
-
-                {/* Genre */}
-                <Text style={styles.label}>Genre</Text>
-                <View style={styles.row}>
-                    <TouchableOpacity style={[styles.optionButton, petData.gender === 'Male' && styles.selectedOption]} onPress={() => handleInputChange('gender', 'Male')}>
-                        <Text style={styles.optionText}>♂️ Mâle</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.optionButton, petData.gender === 'Female' && styles.selectedOption]} onPress={() => handleInputChange('gender', 'Female')}>
-                        <Text style={styles.optionText}>♀️ Femelle</Text>
-                    </TouchableOpacity>
-                </View>
-
-                {/* Taille */}
-                <Text style={styles.label}>Taille</Text>
-                <View style={styles.row}>
-                    <TouchableOpacity style={[styles.optionButton, petData.size === 'Petit' && styles.selectedOption]} onPress={() => handleInputChange('size', 'Petit')}>
-                        <Text style={styles.optionText}>🐾 Petit</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.optionButton, petData.size === 'Moyen' && styles.selectedOption]} onPress={() => handleInputChange('size', 'Moyen')}>
-                        <Text style={styles.optionText}>🐕 Moyen</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.optionButton, petData.size === 'Grand' && styles.selectedOption]} onPress={() => handleInputChange('size', 'Grand')}>
-                        <Text style={styles.optionText}>🦮 Grand</Text>
-                    </TouchableOpacity>
-                </View>
-
-                {/* Bouton Ajouter */}
-                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                    <Text style={styles.buttonText}>Ajouter</Text>
-                </TouchableOpacity>
-            </ScrollView>
-        </View>
-    );
-};
+const Section = ({ title, children }) => (
+  <View style={{ marginBottom: 24 }}>
+    <Text style={{ fontSize: 16, fontWeight: '600', color: '#333', marginBottom: 10 }}>{title}</Text>
+    {children}
+  </View>
+);
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#F5F5F5' },
-    form: { padding: 20 },
-    label: { fontSize: 16, fontWeight: 'bold', marginBottom: 5 },
-    input: { backgroundColor: '#fff', padding: 10, borderRadius: 8, marginBottom: 15, fontSize: 16, borderWidth: 1, borderColor: '#ccc' },
-    row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 },
-    button: { backgroundColor: '#4CAF50', padding: 15, borderRadius: 10, alignItems: 'center', marginTop: 10 },
-    buttonText: { fontSize: 18, color: '#fff', fontWeight: 'bold' },
+  button: {
+    backgroundColor: '#4A3AFF',
+    paddingVertical: 14,
+    borderRadius: 10,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: '600',
+    textAlign: 'center',
+    fontSize: 16,
+  },
 });
 
 export default AddPetScreen;

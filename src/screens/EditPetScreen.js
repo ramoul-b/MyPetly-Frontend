@@ -5,18 +5,17 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
   Switch,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { updateAnimal, getAnimalById } from '../services/animalService';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { animalService } from '../services/animalService';
 
 import InputField from '../components/formFields/InputField';
 import InputSelect from '../components/formFields/InputSelect';
 import InputDate from '../components/formFields/InputDate';
 import InputGender from '../components/formFields/InputGender';
-import InputWeightSlider from '../components/formFields/InputSlider';
+import InputSlider from '../components/formFields/InputSlider';
 import ProfileImagePicker from '../components/formFields/ProfileImagePicker';
 
 const SPECIES_OPTIONS = [
@@ -57,19 +56,35 @@ const EditPetScreen = () => {
     identification_number: '',
     photo: '',
   });
-
-  useEffect(() => {
-    loadPet();
-  }, []);
-
-  const loadPet = async () => {
+  const handleImageSelected = async (uri) => {
     try {
-      const data = await getAnimalById(petId);
-      setForm({ ...form, ...data });
-    } catch (err) {
-      alert('Erreur de chargement');
+      const imageData = {
+        uri: uri,
+        type: 'image/jpeg',
+        fileName: `animal_${petId}.jpg`,
+      };
+  
+      await animalService.uploadAnimalImage(petId, imageData); // ✅
+      handleChange('photo', uri); // ✅ on met à jour l'affichage
+  
+    } catch (error) {
+      console.error('Erreur upload image', error);
+      alert('Erreur lors de l\'upload de l\'image');
     }
   };
+  
+  useEffect(() => {
+    async function fetchAnimal() {
+      try {
+        const data = await animalService.getAnimal(petId);
+        setForm(data);
+      } catch (error) {
+        console.error('Erreur chargement animal', error);
+        alert('Erreur de chargement');
+      }
+    }
+    fetchAnimal();
+  }, [petId]);
 
   const handleChange = (field, value) => {
     setForm(prev => ({ ...prev, [field]: value }));
@@ -77,11 +92,12 @@ const EditPetScreen = () => {
 
   const handleSave = async () => {
     try {
-      await updateAnimal(petId, form);
-      alert('Sauvegardé');
+      await animalService.updateAnimal(petId, form);
+      alert('Animal mis à jour');
       navigation.goBack();
-    } catch (err) {
-      alert('Erreur de mise à jour');
+    } catch (error) {
+      console.error('Erreur update', error);
+      alert('Erreur lors de la mise à jour');
     }
   };
 
@@ -93,8 +109,7 @@ const EditPetScreen = () => {
 
       <Text style={styles.header}>Modifier l’animal</Text>
 
-      <ProfileImagePicker image={form.photo} onChange={val => handleChange('photo', val)} />
-
+      <ProfileImagePicker image={form.photo} onImageSelected={handleImageSelected} />
 
       <Section title="Informations générales">
         <InputField label="Nom" value={form.name} onChangeText={val => handleChange('name', val)} />
@@ -103,7 +118,7 @@ const EditPetScreen = () => {
         <InputGender value={form.gender} onChange={val => handleChange('gender', val)} />
         <InputField label="Couleur" value={form.color} onChangeText={val => handleChange('color', val)} />
         <InputDate label="Date de naissance" value={form.birth_date} onChange={val => handleChange('birth_date', val)} />
-        <InputWeightSlider value={form.weight} onChange={val => handleChange('weight', val)} />
+        <InputSlider value={form.weight} onChange={val => handleChange('weight', val)} />
         <InputField label="Taille (cm)" value={form.height} onChangeText={val => handleChange('height', val)} />
         <InputField label="N° d'identification" value={form.identification_number} onChangeText={val => handleChange('identification_number', val)} />
       </Section>
@@ -142,9 +157,6 @@ const styles = StyleSheet.create({
   container: { backgroundColor: '#fff', padding: 16 },
   back: { marginBottom: 10 },
   header: { fontSize: 20, fontWeight: '700', textAlign: 'center', marginBottom: 20 },
-  avatarContainer: { alignItems: 'center', marginBottom: 20 },
-  avatar: { width: 90, height: 90, borderRadius: 45, backgroundColor: '#eee' },
-  plusIcon: { position: 'absolute', bottom: 0, right: '40%', backgroundColor: '#4A3AFF', borderRadius: 15, padding: 4 },
   section: { marginBottom: 24 },
   sectionTitle: { fontSize: 16, fontWeight: '600', color: '#333', marginBottom: 10 },
   switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 },
