@@ -19,6 +19,7 @@ export const animalService = {
   getAnimal: async (id) => {
     try {
       const response = await apiClient.get(`${ANIMAL_ENDPOINT}/${id}`);
+      console.log('[SERVICE] payload brut :', response.data);
       return response.data;
     } catch (error) {
       throw error.response?.data || error;
@@ -55,24 +56,22 @@ export const animalService = {
     }
   },
 
-  // Télécharger une image pour un animal
+  // src/services/animalService.js
   uploadAnimalImage: async (id, imageData) => {
-    try {
-      const formData = new FormData();
-      formData.append('image', {
-        uri: imageData.uri,
-        type: imageData.type || 'image/jpeg',
-        name: imageData.fileName || 'animal_image.jpg',
-      });
+    const formData = new FormData();
+    formData.append('image', {
+      uri: imageData.uri,
+      type: imageData.type || 'image/jpeg',
+      name: imageData.fileName || 'animal_image.jpg',
+    });
 
-      const response = await apiClient.post(`${ANIMAL_ENDPOINT}/${id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return response.data;
-    } catch (error) {
-      throw error.response?.data || error;
-    }
+    const { data } = await apiClient.post(
+      `/animals/${id}/image`,
+      formData,
+      { headers: { 'Content-Type': 'multipart/form-data' } }
+    );
+
+    return data;
   },
+
 };

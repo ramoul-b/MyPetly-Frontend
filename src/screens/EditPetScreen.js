@@ -58,26 +58,40 @@ const EditPetScreen = () => {
   });
   const handleImageSelected = async (uri) => {
     try {
-      const imageData = {
-        uri: uri,
+
+
+      // pré-affiche la photo locale pour le feedback instantané
+      const localUri = Platform.OS === 'ios' && !uri.startsWith('file://')
+      ? `file://${uri}`
+      : uri;
+      console.log('[UPLOAD] local uri :', localUri);
+      handleChange('photo', localUri);
+  
+      const res = await animalService.uploadAnimalImage(petId, {
+        uri: localUri,
         type: 'image/jpeg',
         fileName: `animal_${petId}.jpg`,
-      };
-  
-      await animalService.uploadAnimalImage(petId, imageData); // ✅
-      handleChange('photo', uri); // ✅ on met à jour l'affichage
-  
-    } catch (error) {
-      console.error('Erreur upload image', error);
-      alert('Erreur lors de l\'upload de l\'image');
+      });
+    
+      console.log('[UPLOAD] réponse API :', res.photo_url);
+      // remplace par l’URL retournée pour un affichage distant
+      handleChange('photo', res.photo_url);
+    } catch (e) {
+      console.error('Erreur upload image', e);
+      alert('Erreur lors de l’upload de l’image');
     }
   };
+  
   
   useEffect(() => {
     async function fetchAnimal() {
       try {
         const data = await animalService.getAnimal(petId);
-        setForm(data);
+        console.log('[SCREEN] reçu :', data);
+        setForm({
+          ...data,
+          photo: data.photo_url,
+        });
       } catch (error) {
         console.error('Erreur chargement animal', error);
         alert('Erreur de chargement');
@@ -92,14 +106,49 @@ const EditPetScreen = () => {
 
   const handleSave = async () => {
     try {
-      await animalService.updateAnimal(petId, form);
+      // Nettoyer proprement
+      const {
+        name,
+        species,
+        breed,
+        birth_date,
+        color,
+        weight,
+        height,
+        gender,
+        identification_number,
+        collar_type,
+        status,
+      } = form; // Extraire uniquement les bons champs
+  
+      const dataToSend = {
+        name,
+        species,
+        breed,
+        birth_date,
+        color,
+        weight,
+        height,
+        sex: gender,
+        identification_number,
+        collar_type,
+        status,
+      };
+  
+      console.log('[SAVE] Données envoyées :', dataToSend);
+  
+      await animalService.updateAnimal(petId, dataToSend);
+  
       alert('Animal mis à jour');
       navigation.goBack();
+      
     } catch (error) {
       console.error('Erreur update', error);
       alert('Erreur lors de la mise à jour');
     }
   };
+  
+  
 
   return (
     <ScrollView style={styles.container}>

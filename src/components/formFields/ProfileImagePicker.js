@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   container: { alignItems: 'center', marginBottom: 20 },
   avatar: { width: 90, height: 90, borderRadius: 45, backgroundColor: '#eee' },
   placeholder: { width: 90, height: 90, borderRadius: 45, backgroundColor: '#eee', justifyContent: 'center', alignItems: 'center' },
-  plusIcon: { position: 'absolute', bottom: 0, right: '40%', backgroundColor: '#4A3AFF', borderRadius: 15, padding: 4 },
+  plusIcon: { position: 'absolute', bottom: 0, right: 0, backgroundColor: '#4A3AFF', borderRadius: 15, padding: 4 },
 });
 
 export default ProfileImagePicker;
