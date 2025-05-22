@@ -76,5 +76,10 @@
 	<string>Cette app a besoin d'accéder à votre galerie pour choisir une photo de profil</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Cette app a besoin d'accéder à votre appareil photo pour prendre une photo</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Nous avons besoin de votre position pour trouver les prestataires à proximité.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Autorisez la localisation pour améliorer les résultats de recherche à proximité.</string>
+
 </dict>
 </plist>

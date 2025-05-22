@@ -1,139 +1,148 @@
-import React from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  StyleSheet,
+} from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTranslation } from 'react-i18next';
-import AppHeader from '../components/AppHeader';
 
-const serviceProviders = [
-  {
-    id: 1,
-    name: 'Vasilenko Oksana',
-    specialty: 'Veterinary Dentist',
-    rating: 4.8,
-    reviews: 125,
-    experience: '10 years of experience',
-    distance: '1.5 km',
-    price: '$20',
-    image: 'https://via.placeholder.com/150',
-  },
-  {
-    id: 2,
-    name: 'Avramenko Vladimir',
-    specialty: 'Veterinary Dentist',
-    rating: 4.7,
-    reviews: 108,
-    experience: '7 years of experience',
-    distance: '1.5 km',
-    price: '$20',
-    image: 'https://via.placeholder.com/150',
-  },
-  {
-    id: 3,
-    name: 'Aleksenko Vasily',
-    specialty: 'Veterinary Dentist',
-    rating: 4.6,
-    reviews: 102,
-    experience: '15 years of experience',
-    distance: '1.5 km',
-    price: '$20',
-    image: 'https://via.placeholder.com/150',
-  },
-  {
-    id: 4,
-    name: 'Lauren Sell',
-    specialty: 'Veterinary Dentist',
-    rating: 4.5,
-    reviews: 95,
-    experience: '10 years of experience',
-    distance: '1.5 km',
-    price: '$20',
-    image: 'https://via.placeholder.com/150',
-  },
-  {
-    id: 5,
-    name: 'Shinkarenko Eugene',
-    specialty: 'Veterinary Dentist',
-    rating: 4.4,
-    reviews: 81,
-    experience: '10 years of experience',
-    distance: '1.5 km',
-    price: '$20',
-    image: 'https://via.placeholder.com/150',
-  },
-  {
-    id: 6,
-    name: 'Vasilenko Oksana',
-    specialty: 'Veterinary Dentist',
-    rating: 4.8,
-    reviews: 125,
-    experience: '10 years of experience',
-    distance: '1.5 km',
-    price: '$20',
-    image: 'https://via.placeholder.com/150',
-  },
-  {
-    id: 7,
-    name: 'Avramenko Vladimir',
-    specialty: 'Veterinary Dentist',
-    rating: 4.7,
-    reviews: 108,
-    experience: '7 years of experience',
-    distance: '1.5 km',
-    price: '$20',
-    image: 'https://via.placeholder.com/150',
-  },
-];
+import AppHeader from '../components/AppHeader';
+import useProviders from '../hooks/useProviders';
+import Geolocation from '@react-native-community/geolocation';
+import { geocodeAddress } from '../utils/geocode';
+import { calculateDistance } from '../utils/distance';
 
 const ServiceProvidersScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { t } = useTranslation();
-  const { serviceName } = route.params || {}; 
+  const { t, i18n } = useTranslation();
+  const { serviceId, serviceName } = route.params || {};
+  const lang = i18n.language || 'en';
+
+  const { providers: serviceProviders, loading } = useProviders(serviceId);
+
+  const [userLocation, setUserLocation] = useState(null);
+  const [distances, setDistances] = useState({});
+
+  // Position utilisateur
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      },
+      (error) => {
+        console.error('❌ Erreur localisation user :', error);
+        // Fallback à Paris par défaut
+        setUserLocation({ latitude: 48.8566, longitude: 2.3522 });
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+  }, []);
+  
+
+  // Calcul des distances
+  useEffect(() => {
+    if (!userLocation) return;
+
+    const fetchDistances = async () => {
+      const result = {};
+      for (const item of serviceProviders) {
+        const coords = await geocodeAddress(item.provider?.address);
+        if (coords) {
+          result[item.id] = calculateDistance(
+            userLocation.latitude,
+            userLocation.longitude,
+            coords.latitude,
+            coords.longitude
+          );
+        }
+      }
+      setDistances(result);
+    };
+
+    fetchDistances();
+  }, [userLocation, serviceProviders]);
+
+  if (loading) return <Text>Chargement...</Text>;
 
   return (
     <View style={styles.container}>
-      {/* Utilisation du Header global */}
       <AppHeader title={t(serviceName)} navigation={navigation} />
 
-      {/* Barre de recherche */}
       <View style={styles.searchContainer}>
         <Icon name="search-outline" size={20} color="#888" />
-        <TextInput 
-          style={styles.searchInput} 
-          placeholder={t('search_placeholder', { service: serviceName })} 
+        <TextInput
+          style={styles.searchInput}
+          placeholder={t('search_placeholder', { service: serviceName })}
         />
       </View>
 
-      {/* Liste des prestataires */}
       <FlatList
         data={serviceProviders}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity style={styles.card} 
-          onPress={() => navigation.navigate('ProviderProfile', { providerId: item.id })}
-          >
-            <Image source={{ uri: item.image }} style={styles.image} />
-            <View style={styles.info}>
-              <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.specialty}>{item.specialty}</Text>
-              <View style={styles.ratingContainer}>
-                <Text style={styles.rating}>⭐ {item.rating}</Text>
-                <Text style={styles.reviews}>{item.reviews} Reviews</Text>
-              </View>
-              <Text style={styles.experience}>{item.experience}</Text>
-              <View style={styles.metaInfo}>
-                <View style={styles.row}>
-                  <Icon name="location-outline" size={16} color="#4A4A4A" />
-                  <Text style={styles.metaText}>{item.distance}</Text>
+        renderItem={({ item }) => {
+          const provider = item.provider;
+          const distance = distances[item.id]
+            ? `${distances[item.id]} km`
+            : '...';
+
+          return (
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+              navigation.navigate('ProviderProfile', {
+                providerId: item.provider?.id,
+                serviceId: serviceId,
+              })
+}
+
+            >
+              <Image
+                source={{ uri: provider.photo || 'https://via.placeholder.com/60' }}
+                style={styles.image}
+              />
+              <View style={styles.info}>
+                <Text style={styles.name}>{provider.name?.[lang] || 'N/A'}</Text>
+                <Text style={styles.specialty}>
+                  {provider.specialization?.[lang] || '-'}
+                </Text>
+                <View style={styles.ratingContainer}>
+                  <Text style={styles.rating}>⭐ {provider.rating}</Text>
                 </View>
-                <View style={styles.row}>
-                  <Icon name="cash-outline" size={16} color="#4A4A4A" />
-                  <Text style={styles.metaText}>{item.price}</Text>
+                <View style={styles.metaInfo}>
+                  <View style={styles.row}>
+                    <Icon name="location-outline" size={16} color="#4A4A4A" />
+                    <Text style={styles.metaText}>{distance}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Icon name="cash-outline" size={16} color="#4A4A4A" />
+                    <Text style={styles.metaText}>{item.price} €</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Icon name="time-outline" size={16} color="#4A4A4A" />
+                    <Text style={styles.metaText}>{item.duration} min</Text>
+                  
+
+                  </View>
+                  
                 </View>
               </View>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          );
+        }}
+        ListEmptyComponent={() => (
+          <Text style={{ textAlign: 'center', marginTop: 20 }}>
+            Aucun prestataire trouvé
+          </Text>
         )}
         contentContainerStyle={{ paddingBottom: 20 }}
       />
@@ -198,23 +207,16 @@ const styles = StyleSheet.create({
     color: '#FFA500',
     marginRight: 5,
   },
-  reviews: {
-    fontSize: 12,
-    color: '#666',
-  },
-  experience: {
-    fontSize: 12,
-    color: '#888',
-    marginTop: 5,
-  },
   metaInfo: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     marginTop: 5,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: 15,
+    marginTop: 4,
   },
   metaText: {
     fontSize: 12,

@@ -9,6 +9,7 @@ import SplashScreen from 'react-native-splash-screen';
 import './translations/i18n';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { checkAuthStatus } from './redux/actions/authActions';
+import { StripeProvider } from '@stripe/stripe-react-native';
 
 const queryClient = new QueryClient();
 
@@ -32,9 +33,11 @@ const AppContent = () => {
   
 
   return (
-    <NavigationContainer ref={navigationRef}>
-      {isLoading ? null : isAuthenticated ? <MainStack /> : <AuthStack />}
-    </NavigationContainer>
+    <StripeProvider publishableKey="pk_test_51ROabJPbuTuXlZ2tbB75470UdBoZyEUHKY0JuCDvckdsXJ1ZVVtwgOrAFyVs1GLIvzMk3L3g8sUbVd8USrp5j1Nm00Tw49oSef">
+      <NavigationContainer ref={navigationRef}>
+        {isLoading ? null : isAuthenticated ? <MainStack /> : <AuthStack />}
+      </NavigationContainer>
+    </StripeProvider>
   );
 };
 

@@ -7,6 +7,10 @@ import Splash from '../screens/Splash';
 import ProviderProfileScreen from '../screens/ProviderProfileScreen';
 import PetDetailsScreen from '../screens/PetDetailsScreen';
 import EditPetScreen from '../screens/EditPetScreen';
+import BookingScreen from '../screens/BookingScreen';
+import BookingSuccess from '../screens/BookingSuccess'; 
+import MyAppointmentsScreen from '../screens/MyAppointmentsScreen';
+
 const Stack = createStackNavigator();
 console.log("📌 MainStack chargé");
 
@@ -28,6 +32,23 @@ export default function MainStack() {
       component={ProviderProfileScreen}
       options={{ headerShown: false }}
     />
+    <Stack.Screen name="BookingScreen" component={BookingScreen} options={{ presentation: 'modal', headerShown: false }} />
+
+<Stack.Screen
+  name="BookingSuccess"
+  component={BookingSuccess}
+  options={{ headerShown: false }}
+/>
+
+
+
+<Stack.Screen
+  name="MyAppointments"
+  component={MyAppointmentsScreen}
+  options={{ title: 'Mes RDV' }}
+/>
+
+
   </Stack.Navigator>
   );
 }
