@@ -10,7 +10,7 @@ import './translations/i18n';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { checkAuthStatus } from './redux/actions/authActions';
 import { StripeProvider } from '@stripe/stripe-react-native';
-
+import Toast from 'react-native-toast-message';
 const queryClient = new QueryClient();
 
 const AppContent = () => {
@@ -46,6 +46,7 @@ export default function App() {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <AppContent />
+        <Toast ref={(ref) => Toast.setRef(ref)} />
       </QueryClientProvider>
     </Provider>
   );
