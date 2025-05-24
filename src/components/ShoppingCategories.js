@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
-import ShoppingCategoriesStyles from "../styles/ShoppingCategoriesStyles";
+import ShoppingCategoriesStyles from "../assets/styles/ShoppingCategoriesStyles";
 
 const categories = [
   { id: '1', name: 'Food', icon: 'restaurant', type: 'material', color: '#FFBE5E' }, // Nourriture

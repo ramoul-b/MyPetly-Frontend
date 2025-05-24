@@ -8,7 +8,7 @@ import ShoppingCategories from '../components/ShoppingCategories';
 import AnimalCarousel from '../components/AnimalCarousel';
 import ServiceList from '../components/ServiceList';
 import { useTranslation } from 'react-i18next';
-import HomeStyles from "../styles/HomeStyles";
+import HomeStyles from "../assets/styles/HomeStyles";
 import ReminderCarousel from '../components/ReminderCarousel';
 import BlogCommunitySection from '../components/BlogCommunitySection';
 

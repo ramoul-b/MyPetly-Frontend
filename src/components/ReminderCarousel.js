@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import AppIcon from './AppIcon';
-import ReminderBarStyles from '../styles/ReminderBarStyles';
+import ReminderBarStyles from '../assets/styles/ReminderBarStyles';
 
 const reminders = [
   { id: '1', type: 'appointment', message: "RDV Vétérinaire", icon: "calendar-outline", color: "#5E72E4" },
@@ -10,23 +10,23 @@ const reminders = [
   { id: '4', type: 'feeding', message: "Rappel Repas", icon: "fast-food-outline", color: "#FFA500" },
 ];
 
-const ReminderBar = ({ navigation }) => {
-  return (
-    <View style={ReminderBarStyles.container}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {reminders.map((reminder) => (
-          <TouchableOpacity 
-            key={reminder.id} 
-            style={[ReminderBarStyles.reminderItem, { backgroundColor: reminder.color + '0' }]} 
-            onPress={() => navigation.navigate('Notifications')}
-          >
-            <AppIcon name={reminder.icon} size={24} color={reminder.color} />  {/* Ajout de la prop color ✅ */}
+const ReminderBar = ({ navigation }) => (
+  <View style={ReminderBarStyles.container}>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      {reminders.map((reminder) => (
+        <TouchableOpacity
+          key={reminder.id}
+          style={[ReminderBarStyles.reminderItem, { backgroundColor: reminder.color + '0' }]}
+          onPress={() => navigation.navigate('Notifications')}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <AppIcon name={reminder.icon} size={24} color={reminder.color} />
             <Text style={ReminderBarStyles.reminderText}>{reminder.message}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </View>
-  );
-};
+          </View>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
+  </View>
+);
 
 export default ReminderBar;

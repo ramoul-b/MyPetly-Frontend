@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image,Text } from 'react-native';
 import { Header } from 'react-native-elements';
 import NotificationMenu from './NotificationMenu';
 import ProfileMenu from './ProfileMenu';
@@ -41,9 +41,10 @@ const AppHeader = () => {
         ) : null
       }
       centerComponent={{ 
-        text: user ? `${t('home.title', { name: user.name })}` : t('home.title', { name: '...' }),
-        style: { color: '#fff', fontSize: 18 }
-      }}
+  text: <Text style={{color: '#fff', fontSize: 18}}>{user ? t('home.title', { name: user.name }) : t('home.title', { name: '...' })}</Text>, 
+  
+}}
+
       rightComponent={
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <NotificationMenu />

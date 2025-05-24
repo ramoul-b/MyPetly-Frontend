@@ -2,7 +2,7 @@
 import React from "react";
 import { View, TextInput } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import InputStyles from "../styles/InputStyles";
+import InputStyles from "../assets/styles/InputStyles";
 
 const SearchBar = () => {
   return (
